@@ -1,0 +1,46 @@
+---
+import type { IHomepage } from '../types/strapi';
+
+interface Props {
+  data: IHomepage;
+}
+
+const { data } = Astro.props;
+---
+
+<section class="py-16 md:py-24">
+  <div class="text-center mb-12">
+    <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-stone-900">
+      Sobre Nosotros
+    </h2>
+    <p class="mt-3 text-stone-600 max-w-xl mx-auto leading-relaxed">
+      Conoce quiénes somos, lo que buscamos y cómo empezó todo.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+    <article class="group bg-white p-6 lg:p-8 rounded-2xl border border-stone-200/60 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+      <div class="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform duration-200">
+        ❤️
+      </div>
+      <h3 class="text-lg font-bold text-emerald-800 mb-2">{data.misionTitle}</h3>
+      <p class="text-sm text-stone-600 leading-relaxed">{data.misionContent}</p>
+    </article>
+
+    <article class="group bg-white p-6 lg:p-8 rounded-2xl border border-stone-200/60 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+      <div class="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform duration-200">
+        🎯
+      </div>
+      <h3 class="text-lg font-bold text-emerald-800 mb-2">{data.visionTitle}</h3>
+      <p class="text-sm text-stone-600 leading-relaxed">{data.visionContent}</p>
+    </article>
+
+    <article class="group bg-white p-6 lg:p-8 rounded-2xl border border-stone-200/60 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+      <div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform duration-200">
+        📖
+      </div>
+      <h3 class="text-lg font-bold text-amber-800 mb-2">{data.historiaTitle}</h3>
+      <p class="text-sm text-stone-600 leading-relaxed">{data.historiaContent}</p>
+    </article>
+  </div>
+</section>
