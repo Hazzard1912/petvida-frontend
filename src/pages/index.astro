@@ -1,31 +1,71 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { strapiFetch } from '../lib/strapi';
+import type { StrapiSingleResponse, IHomepage } from '../types/strapi';
+
+// 1. Datos por defecto (Mock) en caso de que Strapi esté apagado o vacío
+let homepageData: IHomepage = {
+	id: 0,
+	documentId: '',
+	heroTitle: 'Segunda oportunidad para peludos',
+	heroSubtitle: 'Refugio con sede en Cali, impulsado por voluntarios, padrinos y donantes dedicados al rescate animal.',
+	misionTitle: 'Nuestra Misión',
+	misionContent: 'Cargando misión desde el servidor local...',
+	visionTitle: 'Nuestra Visión',
+	visionContent: 'Cargando visión desde el servidor local...',
+	createdAt: '',
+	updatedAt: '',
+	publishedAt: ''
+};
+
+let connectionError = false;
+
+// 2. Intento de Fetch a Strapi 5 en tiempo de ejecución de servidor
+try {
+	const response = await strapiFetch<StrapiSingleResponse<IHomepage>>('homepage');
+	if (response && response.data) {
+		homepageData = response.data;
+	}
+} catch (error) {
+	console.error('No se pudo conectar con Strapi. Usando datos locales de respaldo.');
+	connectionError = true;
+}
 ---
 
 <Layout title="Inicio - Rescate y Adopción Animal">
 	<section class="py-12 md:py-20 text-center space-y-6">
-		<span class="inline-flex items-center px-3 py-1 text-xs font-medium text-emerald-800 bg-emerald-100 rounded-full">
-			Proyecto PetVida
-		</span>
+		{connectionError ? (
+			<span class="inline-flex items-center px-3 py-1 text-xs font-medium text-amber-800 bg-amber-100 rounded-full">
+				Modo Desconectado (Usando Mock Local) ⚠️
+			</span>
+		) : (
+			<span class="inline-flex items-center px-3 py-1 text-xs font-medium text-emerald-800 bg-emerald-100 rounded-full">
+				Conectado a Strapi 5 con Éxito 🚀
+			</span>
+		)}
+
 		<h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-stone-900 max-w-3xl mx-auto leading-tight">
-			Segunda oportunidad para más de <span class="text-emerald-600">150 perros y gatos</span>
+			{homepageData.heroTitle}
 		</h1>
 		<p class="text-base sm:text-lg text-stone-600 max-w-2xl mx-auto leading-relaxed">
-			Refugio con sede en Cali, impulsado por voluntarios, padrinos y donantes dedicados al rescate y la rehabilitación animal.
+			{homepageData.heroSubtitle}
 		</p>
+		
 		<div class="flex items-center justify-center gap-4 pt-4">
-			<a 
-				href="/adopta" 
-				class="inline-flex items-center justify-center px-6 h-12 font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-md transition-colors"
-			>
+			<a href="/adopta" class="inline-flex items-center justify-center px-6 h-12 font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-md transition-colors">
 				Ver Mascotas
 			</a>
-			<a 
-				href="/ayudanos" 
-				class="inline-flex items-center justify-center px-6 h-12 font-medium text-emerald-700 bg-white hover:bg-stone-50 border border-stone-200 rounded-xl shadow-xs transition-colors"
-			>
-				¿Cómo ayudar?
-			</a>
+		</div>
+	</section>
+
+	<section class="grid grid-cols-1 md:grid-cols-2 gap-8 my-12 pt-12 border-t border-stone-200">
+		<div class="bg-white p-6 rounded-2xl border border-stone-200/60 shadow-xs">
+			<h2 class="text-xl font-bold text-emerald-800 mb-3">{homepageData.misionTitle}</h2>
+			<p class="text-sm text-stone-600 leading-relaxed">{homepageData.misionContent}</p>
+		</div>
+		<div class="bg-white p-6 rounded-2xl border border-stone-200/60 shadow-xs">
+			<h2 class="text-xl font-bold text-emerald-800 mb-3">{homepageData.visionTitle}</h2>
+			<p class="text-sm text-stone-600 leading-relaxed">{homepageData.visionContent}</p>
 		</div>
 	</section>
 </Layout>
