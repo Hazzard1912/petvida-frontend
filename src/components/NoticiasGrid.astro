@@ -1,0 +1,136 @@
+---
+import { strapiFetch } from '../lib/strapi';
+import type { StrapiCollectionResponse, INoticia } from '../types/strapi';
+
+const defaultNoticias: INoticia[] = [
+  {
+    id: 1,
+    documentId: '',
+    title: 'Jornada de Adopción Exitosa en Cali',
+    slug: 'jornada-adopcion-exitosa',
+    description: 'Más de 15 peludos encontraron un hogar en nuestra última jornada de adopción. La comunidad respondió con mucho cariño y compromiso.',
+    content: [],
+    publishedAtDate: '2026-05-15',
+    createdAt: '',
+    updatedAt: '',
+    publishedAt: '',
+  },
+  {
+    id: 2,
+    documentId: '',
+    title: 'Campaña de Esterilización Gratuita',
+    slug: 'campana-esterilizacion',
+    description: 'Gracias a nuestros aliados veterinarios, logramos esterilizar a 40 animales en situación de calle durante la última semana.',
+    content: [],
+    publishedAtDate: '2026-04-28',
+    createdAt: '',
+    updatedAt: '',
+    publishedAt: '',
+  },
+  {
+    id: 3,
+    documentId: '',
+    title: 'Nuevos Padrinos se Sumaron al Refugio',
+    slug: 'nuevos-padrinos',
+    description: 'Tres nuevas empresas locales se unieron como padrinos, asegurando alimento y atención veterinaria por los próximos seis meses.',
+    content: [],
+    publishedAtDate: '2026-04-10',
+    createdAt: '',
+    updatedAt: '',
+    publishedAt: '',
+  },
+];
+
+let noticias: INoticia[] = defaultNoticias;
+let isLoadingError = false;
+
+try {
+  const response = await strapiFetch<StrapiCollectionResponse<INoticia>>('noticias', {
+    query: {
+      'sort[0]': 'publishedAtDate:desc',
+      'pagination[pageSize]': '3',
+      'pagination[page]': '1',
+    },
+  });
+  if (response?.data?.length) {
+    noticias = response.data;
+  }
+} catch (error) {
+  console.error('No se pudieron cargar las noticias. Usando datos de respaldo.');
+  isLoadingError = true;
+}
+
+function formatDate(dateStr: string): string {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+  return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+}
+---
+
+<section class="py-16 md:py-24 border-t border-stone-200">
+  <div class="flex items-end justify-between mb-10">
+    <div>
+      <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-stone-900">
+        Últimas Noticias
+      </h2>
+      <p class="mt-2 text-stone-600 leading-relaxed">
+        Enterate de nuestras actividades, campañas y logros.
+      </p>
+    </div>
+    <a
+      href="/noticias"
+      class="hidden sm:inline-flex items-center gap-1 text-sm font-medium text-emerald-600 hover:text-emerald-700 transition-colors"
+    >
+      Ver todas
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+        <path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd" />
+      </svg>
+    </a>
+  </div>
+
+  {isLoadingError && (
+    <div class="mb-6 inline-flex items-center px-3 py-1 text-xs font-medium text-amber-800 bg-amber-100 rounded-full">
+      Mostrando noticias de respaldo
+    </div>
+  )}
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {noticias.map((noticia) => (
+      <article class="group bg-white rounded-2xl border border-stone-200/60 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col">
+        <div class="p-6 flex flex-col grow">
+          <time class="text-xs font-medium text-emerald-600 mb-2" datetime={noticia.publishedAtDate}>
+            {formatDate(noticia.publishedAtDate)}
+          </time>
+          <h3 class="text-base font-bold text-stone-900 mb-2 leading-snug group-hover:text-emerald-700 transition-colors">
+            {noticia.title}
+          </h3>
+          <p class="text-sm text-stone-600 leading-relaxed line-clamp-2 mb-4">
+            {noticia.description}
+          </p>
+          <a
+            href={`/noticias/${noticia.slug}`}
+            class="mt-auto inline-flex items-center gap-1 text-sm font-medium text-emerald-600 hover:text-emerald-700 transition-colors"
+          >
+            Leer más
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+              <path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd" />
+            </svg>
+          </a>
+        </div>
+      </article>
+    ))}
+  </div>
+
+  <div class="mt-10 text-center sm:hidden">
+    <a
+      href="/noticias"
+      class="inline-flex items-center gap-1 text-sm font-medium text-emerald-600 hover:text-emerald-700 transition-colors"
+    >
+      Ver todas las noticias
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+        <path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd" />
+      </svg>
+    </a>
+  </div>
+</section>
