@@ -1,17 +1,31 @@
 ---
-import '../styles/global.css';
+import Layout from '../layouts/Layout.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>PetVida - Huellas de Esperanza</title>
-	</head>
-	<body>
-		<h1 class="text-3xl font-bold text-center text-blue-600 my-8">¡PetVida Inicializado!</h1>
-	</body>
-</html>
+<Layout title="Inicio - Rescate y Adopción Animal">
+	<section class="py-12 md:py-20 text-center space-y-6">
+		<span class="inline-flex items-center px-3 py-1 text-xs font-medium text-emerald-800 bg-emerald-100 rounded-full">
+			Proyecto PetVida
+		</span>
+		<h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-stone-900 max-w-3xl mx-auto leading-tight">
+			Segunda oportunidad para más de <span class="text-emerald-600">150 perros y gatos</span>
+		</h1>
+		<p class="text-base sm:text-lg text-stone-600 max-w-2xl mx-auto leading-relaxed">
+			Refugio con sede en Cali, impulsado por voluntarios, padrinos y donantes dedicados al rescate y la rehabilitación animal.
+		</p>
+		<div class="flex items-center justify-center gap-4 pt-4">
+			<a 
+				href="/adopta" 
+				class="inline-flex items-center justify-center px-6 h-12 font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-md transition-colors"
+			>
+				Ver Mascotas
+			</a>
+			<a 
+				href="/ayudanos" 
+				class="inline-flex items-center justify-center px-6 h-12 font-medium text-emerald-700 bg-white hover:bg-stone-50 border border-stone-200 rounded-xl shadow-xs transition-colors"
+			>
+				¿Cómo ayudar?
+			</a>
+		</div>
+	</section>
+</Layout>

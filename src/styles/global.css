@@ -1,1 +1,21 @@
 @import "tailwindcss";
+
+@theme {
+  /* Personalización o alias de colores si lo requieres */
+  --color-brand-primary: var(--color-emerald-600);
+  --color-brand-hover: var(--color-emerald-700);
+  --color-brand-light: var(--color-emerald-100);
+  --color-brand-bg: #fdfbf7; /* Beige cálido y suave para el fondo */
+}
+
+/* Estilos base para toda la aplicación */
+@layer base {
+  html,
+  body {
+    background-color: var(--color-brand-bg);
+    color: var(--color-stone-800);
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+}

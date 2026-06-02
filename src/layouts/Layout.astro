@@ -1,0 +1,96 @@
+---
+import '../styles/global.css';
+
+interface Props {
+	title: string;
+	description?: string;
+}
+
+const { 
+	title, 
+	description = "Plataforma de adopción y apoyo para la Fundación Huellas de Esperanza en Cali, Colombia." 
+} = Astro.props;
+
+// Año dinámico para el Footer
+const currentYear = new Date().getFullYear();
+---
+
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content={description} />
+		<title>{title} | PetVida</title>
+	</head>
+	<body class="flex flex-col min-h-screen bg-brand-bg text-stone-800 antialiased">
+		
+		<header class="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-md border-b border-stone-200/60 shadow-xs">
+			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+				<div class="flex items-center gap-2">
+					<span class="text-2xl">🐾</span>
+					<a href="/" class="text-xl font-bold tracking-tight text-emerald-700 hover:text-emerald-600 transition-colors">
+						PetVida
+					</a>
+				</div>
+				<nav class="hidden md:flex items-center gap-6 text-sm font-medium">
+					<a href="/" class="text-emerald-700 font-semibold">Inicio</a>
+					<a href="/adopta" class="text-stone-600 hover:text-emerald-600 transition-colors">Adoptar</a>
+					<a href="/ayudanos" class="text-stone-600 hover:text-emerald-600 transition-colors">Donar</a>
+					<a href="/noticias" class="text-stone-600 hover:text-emerald-600 transition-colors">Noticias</a>
+					<a href="/contacto" class="text-stone-600 hover:text-emerald-600 transition-colors">Contacto</a>
+				</nav>
+				<div>
+					<a 
+						href="/adopta" 
+						class="inline-flex items-center justify-center px-4 h-9 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-xs transition-colors"
+					>
+						Adoptar un peludo
+					</a>
+				</div>
+			</div>
+		</header>
+
+		<main class="grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+			<slot />
+		</main>
+
+		<footer class="w-full bg-stone-900 text-stone-400 border-t border-stone-800">
+			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+					<div class="space-y-4">
+						<div class="flex items-center gap-2 text-white">
+							<span class="text-xl">🐾</span>
+							<span class="text-lg font-bold tracking-tight">PetVida</span>
+						</div>
+						<p class="text-xs max-w-sm leading-relaxed">
+							Reutilizando tecnología con propósito para apoyar el refugio de animales Huellas de Esperanza en Cali, Colombia.
+						</p>
+					</div>
+					<div>
+						<h3 class="text-sm font-semibold text-white tracking-wider uppercase mb-4">Enlaces rápidos</h3>
+						<ul class="space-y-2 text-xs">
+							<li><a href="/adopta" class="hover:text-emerald-400 transition-colors">Programa de Adopción</a></li>
+							<li><a href="/ayudanos" class="hover:text-emerald-400 transition-colors">Padrinos y Donantes</a></li>
+							<li><a href="/transparencia" class="hover:text-emerald-400 transition-colors">Documentos ESAL</a></li>
+						</ul>
+					</div>
+					<div>
+						<h3 class="text-sm font-semibold text-white tracking-wider uppercase mb-4">Contacto</h3>
+						<p class="text-xs leading-relaxed">
+							Refugio en Cali, Colombia<br />
+							Proyecto Académico — 404 Crew
+						</p>
+					</div>
+				</div>
+				<div class="mt-8 pt-8 border-t border-stone-800 text-center text-xs flex flex-col sm:flex-row items-center justify-between gap-4">
+					<p>&copy; {currentYear} PetVida (Fundación Huellas de Esperanza). Todos los derechos reservados.</p>
+					<p class="text-stone-600">Desarrollado por Jhonnier Hernandez & 404 Crew</p>
+				</div>
+			</div>
+		</footer>
+
+	</body>
+</html>
