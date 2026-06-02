@@ -11,6 +11,8 @@ export interface IHomepage {
   misionContent: string;
   visionTitle: string;
   visionContent: string;
+  historiaTitle: string;
+  historiaContent: string;
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
