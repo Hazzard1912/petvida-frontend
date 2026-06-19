@@ -1,0 +1,122 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getPetByDocumentId } from '../../lib/strapi';
+import type { IPet } from '../../types/strapi';
+
+export const prerender = false;
+
+const documentId = Astro.params.documentId as string | undefined;
+let pet: IPet | undefined;
+if (documentId) {
+  const response = await getPetByDocumentId(documentId);
+  pet = response?.data?.[0] as IPet | undefined;
+}
+const imageUrl = pet?.photos?.[0]?.url ?? '/images/placeholder-pet.jpg';
+const pageTitle = pet ? `${pet.name} | Detalle de mascota` : 'Mascota no encontrada';
+const pageDescription = pet ? `Conoce a ${pet.name}, ${pet.species} disponible para adopción en PetVida.` : 'No se encontró la mascota que buscabas.';
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <section class="py-16 bg-emerald-50 min-h-screen">
+    <div class="max-w-5xl mx-auto px-4">
+      {pet ? (
+        <div class="space-y-8">
+          <div>
+            <a href="/adopta" class="inline-flex items-center gap-2 rounded-full border border-stone-200 bg-white px-4 py-2 text-sm font-semibold text-stone-700 shadow-sm hover:bg-stone-50">
+              ← Volver al catálogo
+            </a>
+          </div>
+
+          <div class="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] items-start">
+            <div class="overflow-hidden rounded-[2rem] bg-white shadow-sm">
+              <img src={imageUrl} alt={pet.name} class="h-[420px] w-full object-cover" loading="lazy" />
+            </div>
+
+            <div class="space-y-6">
+              <div class="rounded-[2rem] bg-white p-8 shadow-sm">
+                <div class="space-y-4">
+                  <div>
+                    <p class="text-sm uppercase tracking-[0.24em] text-emerald-700 font-semibold">{pet.species}</p>
+                    <h1 class="mt-2 text-4xl font-extrabold text-stone-900">{pet.name}</h1>
+                  </div>
+
+                  <p class="text-stone-600 leading-relaxed">{pet.description || 'No hay descripción disponible para esta mascota aún.'}</p>
+                </div>
+
+                <div class="mt-8 grid gap-4 sm:grid-cols-2">
+                  <div class="rounded-3xl bg-emerald-50 p-5">
+                    <h2 class="text-sm font-semibold uppercase tracking-[0.24em] text-stone-700">Edad</h2>
+                    <p class="mt-2 text-xl font-semibold text-stone-900">{pet.ageGroup}</p>
+                  </div>
+                  <div class="rounded-3xl bg-emerald-50 p-5">
+                    <h2 class="text-sm font-semibold uppercase tracking-[0.24em] text-stone-700">Sexo</h2>
+                    <p class="mt-2 text-xl font-semibold text-stone-900">{pet.gender}</p>
+                  </div>
+                  <div class="rounded-3xl bg-emerald-50 p-5">
+                    <h2 class="text-sm font-semibold uppercase tracking-[0.24em] text-stone-700">Tamaño</h2>
+                    <p class="mt-2 text-xl font-semibold text-stone-900">{pet.size}</p>
+                  </div>
+                  <div class="rounded-3xl bg-emerald-50 p-5">
+                    <h2 class="text-sm font-semibold uppercase tracking-[0.24em] text-stone-700">Estado</h2>
+                    <p class="mt-2 text-xl font-semibold text-stone-900">{pet.isAdopted ? 'Adoptado' : 'Disponible'}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid gap-4 sm:grid-cols-2">
+                <a href="/adopta" class="inline-flex items-center justify-center rounded-3xl bg-emerald-600 px-6 py-4 text-sm font-semibold text-white transition hover:bg-emerald-700">
+                  Ver más mascotas
+                </a>
+                <div class="rounded-3xl bg-white p-6 shadow-sm">
+                  <h2 class="text-sm uppercase tracking-[0.24em] text-emerald-700 font-semibold">Información adicional</h2>
+                  <dl class="mt-4 space-y-3 text-stone-600">
+                    <div>
+                      <dt class="font-semibold">Especie</dt>
+                      <dd>{pet.species}</dd>
+                    </div>
+                    <div>
+                      <dt class="font-semibold">Nombre</dt>
+                      <dd>{pet.name}</dd>
+                    </div>
+                    <div>
+                      <dt class="font-semibold">Edad</dt>
+                      <dd>{pet.ageGroup}</dd>
+                    </div>
+                    <div>
+                      <dt class="font-semibold">Sexo</dt>
+                      <dd>{pet.gender}</dd>
+                    </div>
+                    <div>
+                      <dt class="font-semibold">Tamaño</dt>
+                      <dd>{pet.size}</dd>
+                    </div>
+                    <div>
+                      <dt class="font-semibold">Estado de inventario</dt>
+                      <dd>{pet.estadoInventario || 'desconocido'}</dd>
+                    </div>
+                    <div>
+                      <dt class="font-semibold">Validado</dt>
+                      <dd>{pet.validadoInventario ? 'Sí' : 'No'}</dd>
+                    </div>
+                    {pet.notasInventario ? (
+                      <div>
+                        <dt class="font-semibold">Notas de inventario</dt>
+                        <dd>{pet.notasInventario}</dd>
+                      </div>
+                    ) : null}
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div class="rounded-[2rem] bg-white p-12 text-center shadow-sm">
+          <h1 class="text-3xl font-semibold text-stone-900">Mascota no encontrada</h1>
+          <p class="mt-4 text-stone-600">No pudimos encontrar la mascota que buscabas. Verifica el enlace o regresa al catálogo de mascotas.</p>
+          <a href="/adopta" class="mt-8 inline-flex rounded-full bg-emerald-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700">Volver al catálogo</a>
+        </div>
+      )}
+    </div>
+  </section>
+</Layout>

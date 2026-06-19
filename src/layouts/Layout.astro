@@ -3,14 +3,18 @@ import '../styles/global.css';
 import Navbar from '../shared/Navbar.astro';
 import Footer from '../shared/Footer.astro';
 
-interface Props {
+export interface Props {
 	title: string;
 	description?: string;
+	ogTitle?: string;
+	ogDescription?: string;
 }
 
 const { 
 	title, 
-	description = "Plataforma de adopción y apoyo para la Fundación Huellas de Esperanza en Cali, Colombia." 
+	description = "Plataforma de adopción y apoyo para la Fundación Huellas de Esperanza en Cali, Colombia.",
+	ogTitle = title,
+	ogDescription = description,
 } = Astro.props;
 ---
 
@@ -22,9 +26,12 @@ const {
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<meta name="description" content={description} />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chewy&family=Fredoka:wght@400;500;600;700&family=League+Spartan:wght@500;600;700;800&display=swap" />
 		<title>{title} | PetVida</title>
 	</head>
-	<body class="flex flex-col min-h-screen bg-brand-bg text-stone-800 antialiased">
+	<body class="flex flex-col min-h-screen antialiased">
 
 		<Navbar />
 

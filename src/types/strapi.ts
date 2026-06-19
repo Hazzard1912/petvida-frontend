@@ -34,6 +34,30 @@ export interface INoticia {
   publishedAt: string;
 }
 
+export interface IPet {
+  id: number;
+  documentId: string;
+  name: string;
+  description: string;
+  species: 'perro' | 'gato';
+  ageGroup: 'cachorro' | 'joven' | 'adulto' | 'senior';
+  gender: 'macho' | 'hembra';
+  size: 'pequeño' | 'mediano' | 'grande';
+  isAdopted: boolean;
+  adoptedDated?: string | null;
+  estadoInventario?: 'disponible' | 'reservado' | 'adoptado' | 'retirado';
+  validadoInventario?: boolean;
+  notasInventario?: string | null;
+  photos?: Array<{
+    id: number;
+    url: string;
+    alternativeText?: string | null;
+  }>;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+
 // Interfaces genéricas para envolver las respuestas HTTP de la API de Strapi 5
 export interface StrapiSingleResponse<T> {
   data: T;
