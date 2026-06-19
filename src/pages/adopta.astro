@@ -1,0 +1,163 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getAvailablePets } from '../lib/strapi';
+import type { IPet } from '../types/strapi';
+
+export const prerender = false;
+
+const requestUrl = new URL(Astro.request.url);
+const selectedEspecie = requestUrl.searchParams.get('especie') ?? '';
+const selectedTamano = requestUrl.searchParams.get('tamano') ?? '';
+const selectedEdad = requestUrl.searchParams.get('edad') ?? '';
+const selectedSexo = requestUrl.searchParams.get('sexo') ?? '';
+const selectedEstadoInventario = requestUrl.searchParams.get('estadoInventario') ?? '';
+
+const response = await getAvailablePets();
+const allPets = response?.data ?? [];
+
+const filters = {
+  especie: ['perro', 'gato'],
+  tamano: ['pequeño', 'mediano', 'grande'],
+  edad: ['cachorro', 'joven', 'adulto', 'senior'],
+  sexo: ['macho', 'hembra'],
+  estadoInventario: ['disponible', 'reservado', 'adoptado', 'retirado'],
+};
+
+const filterLabels = {
+  especie: 'Especie',
+  tamano: 'Tamaño',
+  edad: 'Edad',
+  sexo: 'Sexo',
+  estadoInventario: 'Estado',
+};
+
+const capitalize = (value: string) => value.charAt(0).toUpperCase() + value.slice(1);
+
+const statusBadgeClass = (status: string) => {
+  switch (status?.toLowerCase()) {
+    case 'disponible':
+      return 'badge-available';
+    case 'adoptado':
+      return 'badge-adopted';
+    case 'reservado':
+      return 'badge-reservado';
+    case 'retirado':
+      return 'badge-retirado';
+    default:
+      return 'badge-available';
+  }
+};
+
+const filteredPets = allPets.filter((pet: IPet) => {
+  if (selectedEspecie && pet.species !== selectedEspecie) return false;
+  if (selectedTamano && pet.size !== selectedTamano) return false;
+  if (selectedEdad && pet.ageGroup !== selectedEdad) return false;
+  if (selectedSexo && pet.gender !== selectedSexo) return false;
+  if (selectedEstadoInventario && pet.estadoInventario !== selectedEstadoInventario) return false;
+  return true;
+});
+
+const pageTitle = 'Mascotas en Adopción | PetVida';
+const pageDescription = 'Conoce el inventario de mascotas de PetVida, incluyendo estados disponibles, reservados y adoptados. Revisa el catálogo y filtra por el estado de inventario.';
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <section class="page-section py-16">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="text-center mb-12 page-intro">
+        <p class="eyebrow">Catálogo de mascotas</p>
+        <h1 class="mt-4 text-4xl sm:text-5xl font-extrabold">Mascotas disponibles para adopción</h1>
+        <p class="mt-4 text-base sm:text-lg">
+          Revisa nuestro catálogo de mascotas, conoce su historia y ve los detalles de cada peludo antes de solicitar adopción.
+        </p>
+      </div>
+
+      <form action="/adopta" class="filter-panel grid gap-6 mb-10 md:grid-cols-2 xl:grid-cols-4" method="get" aria-label="Filtrar mascotas">
+        <div class="filter-panel-header col-span-full">
+          <div>
+            <p class="filter-panel-title">Filtra por tu próximo compañero</p>
+            <p class="filter-panel-copy">Selecciona la especie, tamaño, edad, sexo y estado para encontrar la mascota que mejor conecte con tu hogar.</p>
+          </div>
+        </div>
+
+        {Object.entries(filters).map(([key, options]) => (
+          <label class="filter-field">
+            <span class="filter-label">{filterLabels[key as keyof typeof filterLabels] ?? capitalize(key)}</span>
+            <select
+              name={key}
+              value={
+                key === 'especie' ? selectedEspecie :
+                key === 'tamano' ? selectedTamano :
+                key === 'edad' ? selectedEdad :
+                key === 'sexo' ? selectedSexo :
+                selectedEstadoInventario
+              }
+              class="filter-select"
+            >
+              <option value="">Todos</option>
+              {options.map(option => (
+                <option value={option}>{capitalize(option)}</option>
+              ))}
+            </select>
+          </label>
+        ))}
+
+        <div class="col-span-full flex justify-end">
+          <button type="submit" class="btn-search">Buscar</button>
+        </div>
+      </form>
+
+      <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+        {filteredPets.length > 0 ? filteredPets.map((pet) => {
+          const imageUrl = pet.photos?.[0]?.url ?? '/images/placeholder-pet.jpg';
+          const state = pet.estadoInventario ?? 'desconocido';
+          return (
+            <article class="group pet-card">
+              <a href={`/adopta/${pet.documentId}`} class="block">
+                <div class="h-72 overflow-hidden bg-stone-100">
+                  <img
+                    class="pet-card-image transition duration-500 group-hover:scale-105"
+                    src={imageUrl}
+                    alt={pet.name}
+                    loading="lazy"
+                  />
+                </div>
+
+                <div class="p-6">
+                  <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                    <span class={`pet-card-badge ${statusBadgeClass(state)}`}>
+                      {state}
+                    </span>
+                    <span class="text-xs font-semibold text-stone-500 uppercase tracking-[0.18em]">{pet.ageGroup}</span>
+                  </div>
+
+                  <h2 class="pet-card-title">{pet.name}</h2>
+                  <p class="pet-card-description">{pet.description || 'Sin descripción disponible.'}</p>
+
+                  <div class="pet-card-meta">
+                    <span>Tamaño: {pet.size}</span>
+                    <span>Sexo: {pet.gender}</span>
+                    <span>Especie: {pet.species}</span>
+                  </div>
+
+                  <div class="pet-card-cta">
+                    Ver detalles
+                    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M8 4L14 10L8 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                </div>
+              </a>
+            </article>
+          );
+        }) : (
+          <div class="col-span-full empty-state">
+            <p class="empty-state-title">No encontramos mascotas con esos filtros.</p>
+            <p class="empty-state-text">El catálogo mostrará todas las mascotas disponibles cuando borres los filtros.</p>
+            <a href="/adopta" class="empty-state-link">Limpiar filtros</a>
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+</Layout>
