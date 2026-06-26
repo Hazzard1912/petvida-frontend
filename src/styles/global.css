@@ -110,6 +110,343 @@
     background: var(--color-surface);
   }
 
+.hero-section {
+  position: relative;
+  overflow: hidden;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  padding: 0.1rem 4rem 0 clamp(2rem, 7vw, 7rem);
+  /*     ↑ Muy poco padding superior */
+  text-align: left;
+  background:
+    radial-gradient(circle at 8% 14%, rgba(255, 203, 222, 0.34) 0 9px, transparent 10px),
+    radial-gradient(circle at 35% 13%, rgba(255, 203, 222, 0.22) 0 7px, transparent 8px),
+    radial-gradient(circle at 7% 34%, rgba(244, 36, 118, 0.10) 0 38px, transparent 39px),
+    radial-gradient(circle at 76% 20%, rgba(32, 200, 241, 0.20) 0 220px, transparent 221px),
+    linear-gradient(180deg, #fff8ea 0%, #fffdf4 100%);
+  box-shadow: none;
+}
+
+/* Header sin margen inferior */
+/* ============================================
+   ELIMINAR ESPACIO ENTRE NAVBAR Y HERO
+   ============================================ */
+
+/* Header sin espacio inferior */
+.site-header {
+  background: var(--color-bg);
+  border-bottom: 1px solid rgba(32, 200, 241, 0.18);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 0 !important;
+  padding: 0.5rem 2rem;
+  position: relative;
+  z-index: 10;
+}
+
+/* Hero sin padding superior */
+.hero-section {
+  position: relative;
+  overflow: hidden;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  padding: 0 4rem 0 clamp(2rem, 7vw, 7rem);  /* padding-top = 0 */
+  margin-top: 0 !important;
+  text-align: left;
+  background:
+    radial-gradient(circle at 8% 14%, rgba(255, 203, 222, 0.34) 0 9px, transparent 10px),
+    radial-gradient(circle at 35% 13%, rgba(255, 203, 222, 0.22) 0 7px, transparent 8px),
+    radial-gradient(circle at 7% 34%, rgba(244, 36, 118, 0.10) 0 38px, transparent 39px),
+    radial-gradient(circle at 76% 20%, rgba(32, 200, 241, 0.20) 0 220px, transparent 221px),
+    linear-gradient(180deg, #fff8ea 0%, #fffdf4 100%);
+  box-shadow: none;
+}
+
+/* Eliminar espacio en contenedores padre */
+main, .main-content, .page-wrapper, .layout-main {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+/* Asegurar que body no tenga espacio extra */
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.hero-section::before {
+  content: "";
+  position: absolute;
+  right: 6%;
+  top: -5rem;
+  width: min(20rem, 28vw);
+  height: 15rem;
+  border-radius: 50% 50% 44% 56% / 48% 44% 56% 52%;
+  background: #b8edff;
+  box-shadow:
+    4.2rem 6.4rem 0 -2.4rem #b8edff,
+    -4.4rem 6.9rem 0 -2.9rem #b8edff;
+  transform: rotate(-5deg);
+  z-index: 0;
+}
+
+.hero-section::after {
+  display: none;
+}
+
+.hero-container {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(24rem, 1fr) minmax(16rem, 0.8fr);
+  align-items: center;
+  gap: clamp(1rem, 2.5vw, 2.5rem);
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+.hero-content {
+  padding-bottom: clamp(0.5rem, 2vw, 1.5rem);
+  padding-left: 2rem;
+}
+
+.hero-title {
+  display: grid;
+  gap: 0.08em;
+  max-width: 36rem;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 3.5vw, 3.5rem);
+  line-height: 0.95;
+  letter-spacing: 0;
+}
+
+.hero-title-dark,
+.hero-title-pink {
+  display: block;
+  white-space: nowrap;
+}
+
+.hero-title-dark {
+  color: #050505;
+}
+
+.hero-title-pink {
+  color: var(--color-primary);
+}
+
+.hero-subtitle {
+  max-width: 22rem;
+  margin: 0.4rem 0 0;
+  color: var(--color-text-muted);
+  font-family: var(--font-body);
+  font-size: clamp(0.9rem, 1.3vw, 1rem);
+  line-height: 1.5;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.7rem;
+  margin-top: 0.7rem;
+}
+
+.hero-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 8rem;
+  min-height: 2.4rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 9999px;
+  color: #ffffff;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.85rem;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.14);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.hero-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.hero-btn-primary {
+  background: var(--color-primary);
+}
+
+.hero-btn-secondary {
+  background: var(--color-secondary);
+}
+
+.hero-image {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-height: auto;
+  padding-right: 1rem;
+}
+
+.hero-image img {
+  position: relative;
+  z-index: 1;
+  width: min(24rem, 80%);
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 18px 24px rgba(15, 23, 42, 0.12));
+}
+  .hero-decor,
+  .hero-blob {
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .hero-paw {
+    width: 2.35rem;
+    height: 2.05rem;
+    color: var(--color-primary);
+    opacity: 0.3;
+    filter: drop-shadow(0 4px 8px rgba(244, 36, 118, 0.08));
+  }
+
+  .hero-paw::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 1.15rem;
+    height: 0.86rem;
+    border-radius: 52% 52% 45% 45%;
+    background: currentColor;
+    transform: translate(-50%, -6%) rotate(-8deg);
+  }
+
+  .hero-paw::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 0.16rem;
+    width: 0.42rem;
+    height: 0.42rem;
+    border-radius: 50%;
+    background: currentColor;
+    box-shadow:
+      -0.65rem 0.34rem 0 currentColor,
+      0.65rem 0.34rem 0 currentColor,
+      -0.3rem -0.06rem 0 currentColor,
+      0.3rem -0.06rem 0 currentColor;
+    transform: translateX(-50%);
+  }
+
+  .hero-paw-large {
+    left: 3.2%;
+    top: 34%;
+    width: 3.1rem;
+    height: 2.75rem;
+    opacity: 0.28;
+    transform: rotate(-9deg);
+  }
+
+  .hero-paw-large::before {
+    width: 1.55rem;
+    height: 1.15rem;
+  }
+
+  .hero-paw-large::after {
+    top: 0.35rem;
+    width: 0.52rem;
+    height: 0.52rem;
+    box-shadow:
+      -0.9rem 0.48rem 0 currentColor,
+      0.9rem 0.48rem 0 currentColor,
+      -0.42rem -0.08rem 0 currentColor,
+      0.42rem -0.08rem 0 currentColor;
+  }
+
+  .hero-paw-small {
+    display: none;
+  }
+
+  .hero-paw-top {
+    right: 13%;
+    top: 18%;
+    transform: rotate(12deg);
+  }
+
+  .hero-bone {
+    width: 2.9rem;
+    height: 0.58rem;
+    border-radius: 999px;
+    background: var(--color-secondary);
+    opacity: 0.28;
+    transform: rotate(33deg);
+  }
+
+  .hero-bone::before,
+  .hero-bone::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 0.72rem;
+    height: 0.72rem;
+    border-radius: 50%;
+    background: var(--color-secondary);
+    box-shadow: 0 0.58rem 0 var(--color-secondary);
+    transform: translateY(-50%);
+  }
+
+  .hero-bone::before {
+    left: -0.34rem;
+  }
+
+  .hero-bone::after {
+    right: -0.34rem;
+  }
+
+  .hero-bone-left {
+    left: 3.8%;
+    top: 20%;
+  }
+
+  .hero-bone-center {
+    left: 43%;
+    bottom: 14%;
+  }
+
+  .hero-bone-right {
+    right: 4.2%;
+    top: 38%;
+    transform: rotate(18deg);
+  }
+
+  .hero-blob {
+    background: var(--color-secondary);
+    opacity: 0.28;
+  }
+
+  .hero-blob-blue {
+    left: -4rem;
+    bottom: -2.35rem;
+    width: 13rem;
+    height: 5rem;
+    border-radius: 0 4.5rem 0 0;
+    box-shadow:
+      3.8rem 0.2rem 0 -1.15rem var(--color-secondary),
+      6.8rem 1.65rem 0 -1.8rem var(--color-secondary),
+      9rem 2.55rem 0 -2.25rem var(--color-secondary);
+  }
+
+  .hero-blob-pink {
+    display: none;
+  }
+
   .page-intro .eyebrow {
     font-family: var(--font-ui);
     letter-spacing: 0.22em;
@@ -117,6 +454,561 @@
     color: var(--color-secondary);
   }
 
+/* ============================================
+   SECCIÓN SOBRE NOSOTROS - VERSIÓN FINAL
+   ============================================ */
+
+.about-section {
+  width: 100%;
+  background: #ffffff;
+  padding: 1.5rem 0;
+}
+
+@media (min-width: 768px) {
+  .about-section {
+    padding: 2rem 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .about-section {
+    padding: 2.5rem 0;
+  }
+}
+
+.about-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (min-width: 640px) {
+  .about-container {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .about-container {
+    padding: 0 2rem;
+  }
+}
+
+/* ============================================
+   ENCABEZADO CON HUELLAS - CHEWY Y NEGRILLA
+   ============================================ */
+.about-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.about-header-icons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 0.3rem;
+}
+
+.about-icon-paw {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #F42476;
+  fill: currentColor;
+}
+
+@media (min-width: 768px) {
+  .about-icon-paw {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+.about-title {
+  font-family: 'Chewy', cursive, system-ui;
+  font-weight: 700;
+  font-size: 1.25rem;
+  text-align: center;
+  color: #F42476;
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+@media (min-width: 768px) {
+  .about-title {
+    font-size: 1.6rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .about-title {
+    font-size: 1.9rem;
+  }
+}
+
+.about-icon-paw-blue {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #20C8F1;
+  fill: currentColor;
+}
+
+@media (min-width: 768px) {
+  .about-icon-paw-blue {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+.about-subtitle {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #666666;
+  max-width: 600px;
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .about-subtitle {
+    font-size: 0.95rem;
+  }
+}
+
+/* ============================================
+   GRID DE TARJETAS
+   ============================================ */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .about-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .about-grid {
+    gap: 1.25rem;
+  }
+}
+
+/* ============================================
+   TARJETA 1 - MISIÓN (Fondo crema)
+   ============================================ */
+/* ============================================
+   SECCIÓN SOBRE NOSOTROS - VERSIÓN FINAL
+   ============================================ */
+
+.about-section {
+  width: 100%;
+  background: #ffffff;
+  padding: 1.5rem 0;
+}
+
+@media (min-width: 768px) {
+  .about-section {
+    padding: 2rem 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .about-section {
+    padding: 2.5rem 0;
+  }
+}
+
+.about-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (min-width: 640px) {
+  .about-container {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .about-container {
+    padding: 0 2rem;
+  }
+}
+
+/* ============================================
+   ENCABEZADO CON HUELLAS - CHEWY Y NEGRILLA
+   ============================================ */
+.about-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.about-header-icons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 0.3rem;
+}
+
+.about-icon-paw {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #F42476;
+  fill: currentColor;
+}
+
+@media (min-width: 768px) {
+  .about-icon-paw {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+.about-title {
+  font-family: 'Chewy', cursive, system-ui;
+  font-weight: 700;
+  font-size: 1.25rem;
+  text-align: center;
+  color: #F42476;
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+@media (min-width: 768px) {
+  .about-title {
+    font-size: 1.6rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .about-title {
+    font-size: 1.9rem;
+  }
+}
+
+.about-icon-paw-blue {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #20C8F1;
+  fill: currentColor;
+}
+
+@media (min-width: 768px) {
+  .about-icon-paw-blue {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+.about-subtitle {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #666666;
+  max-width: 600px;
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .about-subtitle {
+    font-size: 0.95rem;
+  }
+}
+
+/* ============================================
+   GRID DE TARJETAS
+   ============================================ */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .about-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .about-grid {
+    gap: 1.25rem;
+  }
+}
+
+/* ============================================
+   TARJETA 1 - MISIÓN (Fondo crema)
+   ============================================ */
+.about-card-mision {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  height: auto;
+  min-height: 100px;
+  border-radius: 1rem;
+  padding: 1rem 1.25rem;
+  background-color: #FCF3DB;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+  gap: 1rem;
+}
+
+.about-card-mision:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.10), 0 4px 6px -2px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   TARJETA 2 - VISIÓN (Fondo azul muy claro)
+   ============================================ */
+.about-card-vision {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  height: auto;
+  min-height: 100px;
+  border-radius: 1rem;
+  padding: 1rem 1.25rem;
+  background-color: #E0F7FF;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+  gap: 1rem;
+}
+
+.about-card-vision:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.10), 0 4px 6px -2px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   TARJETA 3 - HISTORIA (Fondo rosa suave)
+   ============================================ */
+.about-card-historia {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  height: auto;
+  min-height: 100px;
+  border-radius: 1rem;
+  padding: 1rem 1.25rem;
+  background-color: #FFE8F0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+  gap: 1rem;
+}
+
+.about-card-historia:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.10), 0 4px 6px -2px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   ICONOS CIRCULARES - ESTRUCTURA ÚNICA
+   ============================================ */
+
+/* Contenedor del icono (padre del círculo) */
+.about-icon-wrapper-mision,
+.about-icon-wrapper-vision,
+.about-icon-wrapper-historia {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.25rem;
+  height: 3.25rem;
+}
+
+/* Círculo que envuelve el SVG */
+.about-icon-circle-mision,
+.about-icon-circle-vision,
+.about-icon-circle-historia {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent; /* El SVG ya tiene su propio fondo */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+/* SVG dentro del círculo - ocupa todo el espacio */
+.about-icon-mision,
+.about-icon-vision,
+.about-icon-historia {
+  width: 100%;
+  height: 100%;
+  display: block;
+  color: #1a1a1a;
+}
+
+/* Ajustes específicos por tipo de icono */
+.about-icon-mision {
+  padding: 0.2rem;
+}
+
+.about-icon-vision {
+  padding: 0.2rem;
+}
+
+.about-icon-historia {
+  padding: 0.3rem;
+  color: #20C8F1; /* Azul para el hueso */
+}
+
+/* ============================================
+   CONTENIDO DE LAS TARJETAS
+   ============================================ */
+.about-card-content {
+  flex: 1;
+  text-align: left;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.about-card-title-mision {
+  font-family: 'Fredoka', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: #F42476;
+  margin: 0 0 0.4rem 0;
+  line-height: 1.2;
+  padding-top: 0.1rem;
+}
+
+.about-card-title-vision {
+  font-family: 'Fredoka', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: #20C8F1;
+  margin: 0 0 0.4rem 0;
+  line-height: 1.2;
+  padding-top: 0.1rem;
+}
+
+.about-card-title-historia {
+  font-family: 'Fredoka', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: #F42476;
+  margin: 0 0 0.4rem 0;
+  line-height: 1.2;
+  padding-top: 0.1rem;
+}
+
+.about-card-text {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #333333;
+  margin: 0;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 767px) {
+  .about-grid {
+    gap: 0.75rem;
+  }
+
+  .about-card-mision,
+  .about-card-vision,
+  .about-card-historia {
+    padding: 0.75rem 1rem;
+    min-height: 85px;
+    gap: 0.75rem;
+    border-radius: 0.875rem;
+  }
+
+  .about-icon-wrapper-mision,
+  .about-icon-wrapper-vision,
+  .about-icon-wrapper-historia {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  .about-icon-mision,
+  .about-icon-vision,
+  .about-icon-historia {
+    padding: 0.15rem;
+  }
+
+  .about-icon-historia {
+    padding: 0.25rem;
+  }
+
+  .about-card-title-mision,
+  .about-card-title-vision,
+  .about-card-title-historia {
+    font-size: 1rem;
+    margin-bottom: 0.3rem;
+    padding-top: 0.05rem;
+  }
+
+  .about-card-text {
+    font-size: 0.75rem;
+    line-height: 1.4;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-grid {
+    gap: 0.6rem;
+  }
+
+  .about-card-mision,
+  .about-card-vision,
+  .about-card-historia {
+    padding: 0.6rem 0.8rem;
+    min-height: 70px;
+    gap: 0.6rem;
+    border-radius: 0.75rem;
+  }
+
+  .about-icon-wrapper-mision,
+  .about-icon-wrapper-vision,
+  .about-icon-wrapper-historia {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .about-icon-mision,
+  .about-icon-vision,
+  .about-icon-historia {
+    padding: 0.1rem;
+  }
+
+  .about-icon-historia {
+    padding: 0.2rem;
+  }
+
+  .about-card-title-mision,
+  .about-card-title-vision,
+  .about-card-title-historia {
+    font-size: 0.9rem;
+    margin-bottom: 0.2rem;
+    padding-top: 0.05rem;
+  }
+
+  .about-card-text {
+    font-size: 0.7rem;
+    line-height: 1.3;
+  }
+}
   .page-intro h1 {
     font-family: var(--font-title);
     color: var(--color-text);
@@ -458,5 +1350,79 @@
 
   .footer-social:hover {
     color: var(--color-primary);
+  }
+
+  @media (max-width: 820px) {
+    .hero-section {
+      padding-top: 2rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      text-align: center;
+    }
+
+    .hero-container {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .hero-content {
+      padding-bottom: 0;
+    }
+
+    .hero-title,
+    .hero-subtitle {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-title-dark,
+    .hero-title-pink {
+      white-space: normal;
+    }
+
+    .hero-actions {
+      justify-content: center;
+    }
+
+    .hero-image {
+      min-height: 16rem;
+    }
+
+    .hero-image img {
+      width: min(28rem, 100%);
+    }
+
+    .hero-paw-large,
+    .hero-paw-small,
+    .hero-bone-left,
+    .hero-bone-center,
+    .hero-bone-right {
+      opacity: 0.22;
+      transform: scale(0.75);
+    }
+  }
+
+  @media (max-width: 520px) {
+    .hero-section {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    .hero-title {
+      font-size: clamp(2.65rem, 13vw, 3.7rem);
+    }
+
+    .hero-actions {
+      width: 100%;
+    }
+
+    .hero-btn {
+      width: 100%;
+    }
+
+    .hero-paw,
+    .hero-bone {
+      display: none;
+    }
   }
 }

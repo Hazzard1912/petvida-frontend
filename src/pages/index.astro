@@ -1,74 +1,128 @@
 ---
 export const prerender = false;
 
-import Layout from '../layouts/Layout.astro';
-import MisionVision from '../components/MisionVision.astro';
-import NoticiasGrid from '../components/NoticiasGrid.astro';
-import { strapiFetch } from '../lib/strapi';
-import type { StrapiSingleResponse, IHomepage } from '../types/strapi';
+import Layout from "../layouts/Layout.astro";
+import MisionVision from "../components/MisionVision.astro";
+import NoticiasGrid from "../components/NoticiasGrid.astro";
+import { strapiFetch } from "../lib/strapi";
+import type { StrapiSingleResponse, IHomepage } from "../types/strapi";
 
 const defaultHomepage: IHomepage = {
 	id: 0,
-	documentId: '',
-	heroTitle: 'Segunda oportunidad para peludos',
-	heroSubtitle: 'Refugio con sede en Cali, impulsado por voluntarios, padrinos y donantes dedicados al rescate animal.',
-	misionTitle: 'Nuestra Misión',
-	misionContent: 'Rescatar, rehabilitar y encontrar hogares responsables para animales en situación de calle en Cali, promoviendo la tenencia responsable y el respeto por la vida animal.',
-	visionTitle: 'Nuestra Visión',
-	visionContent: 'Ser un refugio de referencia en el suroccidente colombiano, reconocido por nuestra labor ética, la educación comunitaria y el impacto sostenible en el bienestar animal.',
-	historiaTitle: 'Nuestra Historia',
-	historiaContent: 'Huellas de Esperanza nació en Cali como un proyecto académico que pronto se convirtió en una causa ciudadana. Desde nuestros primeros rescates callejeros hasta hoy, cada peludo adoptado es un recordatorio de que el cambio empieza con pequeñas acciones colectivas.',
-	createdAt: '',
-	updatedAt: '',
-	publishedAt: '',
+	documentId: "",
+	heroTitle: "Cada huella merece una segunda oportunidad",
+	heroSubtitle:
+		"Rescatamos, protegemos y encontramos hogares llenos de amor para animales que merecen una nueva oportunidad.",
+	misionTitle: "Nuestra Misión",
+	misionContent:
+		"Rescatar, rehabilitar y encontrar hogares responsables para animales en situación de calle en Cali, promoviendo la tenencia responsable y el respeto por la vida animal.",
+	visionTitle: "Nuestra Visión",
+	visionContent:
+		"Ser un refugio de referencia en el suroccidente colombiano, reconocido por nuestra labor ética, la educación comunitaria y el impacto sostenible en el bienestar animal.",
+	historiaTitle: "Nuestra Historia",
+	historiaContent:
+		"Huellas de Esperanza nació en Cali como un proyecto académico que pronto se convirtió en una causa ciudadana. Desde nuestros primeros rescates callejeros hasta hoy, cada peludo adoptado es un recordatorio de que el cambio empieza con pequeñas acciones colectivas.",
+	createdAt: "",
+	updatedAt: "",
+	publishedAt: "",
 };
 
 let homepageData: IHomepage = defaultHomepage;
 let connectionError = false;
 
 try {
-	const response = await strapiFetch<StrapiSingleResponse<IHomepage>>('homepage');
+	const response =
+		await strapiFetch<StrapiSingleResponse<IHomepage>>("homepage");
 	if (response?.data) {
 		homepageData = response.data;
 	}
 } catch (error) {
-	console.error('No se pudo conectar con Strapi. Usando datos locales de respaldo.');
+	console.error(
+		"No se pudo conectar con Strapi. Usando datos locales de respaldo.",
+	);
 	connectionError = true;
 }
+
+const heroTitleParts = homepageData.heroTitle
+	.toLowerCase()
+	.includes("segunda oportunidad")
+	? {
+			intro: "Cada huella merece",
+			highlight: "una segunda oportunidad",
+		}
+	: {
+			intro: homepageData.heroTitle,
+			highlight: "",
+		};
 ---
 
 <Layout title="Inicio - Rescate y Adopción Animal">
-	{connectionError && (
-		<div class="fixed bottom-4 left-4 z-50 inline-flex items-center px-3 py-1.5 text-xs font-medium text-amber-800 bg-amber-100 rounded-full shadow-xs">
-			Modo offline — datos de respaldo
-		</div>
-	)}
+	{
+		connectionError && (
+			<div class="fixed bottom-4 left-4 z-50 inline-flex items-center px-3 py-1.5 text-xs font-medium text-amber-800 bg-amber-100 rounded-full shadow-xs">
+				Modo offline — datos de respaldo
+			</div>
+		)
+	}
 
-	<section class="py-16 md:py-28 text-center">
-		<h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-stone-900 max-w-3xl mx-auto leading-tight">
-			{homepageData.heroTitle}
-		</h1>
-		<p class="mt-4 text-base sm:text-lg text-stone-600 max-w-2xl mx-auto leading-relaxed">
-			{homepageData.heroSubtitle}
-		</p>
+	<section class="hero-section">
+		<div class="hero-blob hero-blob-right"></div>
+		<div class="hero-blob hero-blob-behind-img"></div>
+		<div class="hero-blob hero-blob-pink-cloud"></div>
+		<div class="hero-blob hero-blob-left"></div>
 
-		<div class="mt-8 flex items-center justify-center gap-4">
-			<a
-				href="/adopta"
-				class="inline-flex items-center justify-center px-6 h-12 font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-md transition-colors"
-			>
-				Ver Mascotas
-			</a>
-			<a
-				href="/ayudanos"
-				class="inline-flex items-center justify-center px-6 h-12 font-medium text-emerald-700 bg-emerald-100 hover:bg-emerald-200 rounded-xl transition-colors"
-			>
-				Quiero Ayudar
-			</a>
+		<div class="hero-decor hero-paw hero-paw-large"></div>
+		<div class="hero-decor hero-paw hero-paw-small"></div>
+		<div class="hero-decor hero-paw hero-paw-top"></div>
+		<div class="hero-decor hero-bone hero-bone-left"></div>
+		<div class="hero-decor hero-bone hero-bone-center"></div>
+		<div class="hero-decor hero-bone hero-bone-right"></div>
+
+		<div class="hero-container">
+			<div class="hero-content">
+				<h1 class="hero-title">
+					<span class="hero-title-dark">{heroTitleParts.intro}</span>
+					{
+						heroTitleParts.highlight && (
+							<span class="hero-title-pink">
+								{heroTitleParts.highlight}
+							</span>
+						)
+					}
+				</h1>
+				<p class="hero-subtitle">
+					{homepageData.heroSubtitle}
+				</p>
+
+				<div class="hero-actions">
+					<a href="/adopta" class="hero-btn hero-btn-primary">
+						<span class="btn-icon-paw" aria-hidden="true">🐾</span>
+						Ver Mascotas
+					</a>
+					<a href="/ayudanos" class="hero-btn hero-btn-secondary">
+						<svg
+							width="20"
+							height="20"
+							viewBox="0 0 24 24"
+							fill="white"
+							xmlns="http://www.w3.org/2000/svg"
+							style="display: block; width: 20px; height: 20px; margin-right: 0.6rem;"
+						>
+							<path
+								d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+							/>
+						</svg>
+						Quiero Ayudar
+					</a>
+				</div>
+			</div>
+
+			<div class="hero-image" aria-hidden="true">
+				<img src="/foto.png" alt="Perro y gato felices" loading="eager" />
+			</div>
 		</div>
 	</section>
 
 	<MisionVision data={homepageData} />
-
 	<NoticiasGrid />
 </Layout>
