@@ -8,39 +8,91 @@ interface Props {
 const { data } = Astro.props;
 ---
 
-<section class="py-16 md:py-24">
-  <div class="text-center mb-12">
-    <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-stone-900">
-      Sobre Nosotros
-    </h2>
-    <p class="mt-3 text-stone-600 max-w-xl mx-auto leading-relaxed">
-      Conoce quiénes somos, lo que buscamos y cómo empezó todo.
-    </p>
-  </div>
-
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-    <article class="group bg-white p-6 lg:p-8 rounded-2xl border border-stone-200/60 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-      <div class="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform duration-200">
-        ❤️
+<section class="about-section">
+  <div class="about-container">
+    
+    
+    <div class="about-header">
+      <div class="about-header-icons">
+        <svg class="about-icon-paw" viewBox="0 0 120 120" fill="currentColor">
+          <ellipse cx="30" cy="30" rx="12" ry="18"/>
+          <ellipse cx="55" cy="18" rx="12" ry="18"/>
+          <ellipse cx="80" cy="30" rx="12" ry="18"/>
+          <ellipse cx="42" cy="55" rx="12" ry="18"/>
+          <ellipse cx="68" cy="55" rx="12" ry="18"/>
+          <path d="M60 62C35 62 20 78 24 96C28 110 92 110 96 96C100 78 85 62 60 62Z"/>
+        </svg>
+        <h2 class="about-title">Sobre Nosotros</h2>
+        <svg class="about-icon-paw-blue" viewBox="0 0 120 120" fill="currentColor">
+          <ellipse cx="30" cy="30" rx="12" ry="18"/>
+          <ellipse cx="55" cy="18" rx="12" ry="18"/>
+          <ellipse cx="80" cy="30" rx="12" ry="18"/>
+          <ellipse cx="42" cy="55" rx="12" ry="18"/>
+          <ellipse cx="68" cy="55" rx="12" ry="18"/>
+          <path d="M60 62C35 62 20 78 24 96C28 110 92 110 96 96C100 78 85 62 60 62Z"/>
+        </svg>
       </div>
-      <h3 class="text-lg font-bold text-emerald-800 mb-2">{data.misionTitle}</h3>
-      <p class="text-sm text-stone-600 leading-relaxed">{data.misionContent}</p>
-    </article>
+      <p class="about-subtitle">Conoce quiénes somos, qué buscamos y cómo empezó todo.</p>
+    </div>
 
-    <article class="group bg-white p-6 lg:p-8 rounded-2xl border border-stone-200/60 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-      <div class="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform duration-200">
-        🎯
-      </div>
-      <h3 class="text-lg font-bold text-emerald-800 mb-2">{data.visionTitle}</h3>
-      <p class="text-sm text-stone-600 leading-relaxed">{data.visionContent}</p>
-    </article>
 
-    <article class="group bg-white p-6 lg:p-8 rounded-2xl border border-stone-200/60 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-      <div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform duration-200">
-        📖
+    <div class="about-grid">
+      
+   
+      <div class="about-card-mision">
+        <div class="about-icon-wrapper-mision">
+          <div class="about-icon-circle-mision">
+            <svg class="about-icon-mision" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="52" fill="#FFCBDE"/>
+              <path fill="#111111" d="M60 84L35 59C28 52 28 40 38 33C45 28 53 30 60 38C67 30 75 28 82 33C92 40 92 52 85 59L60 84Z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="about-card-content">
+          <h3 class="about-card-title-mision">{data.misionTitle}</h3>
+          <p class="about-card-text">{data.misionContent}</p>
+        </div>
       </div>
-      <h3 class="text-lg font-bold text-amber-800 mb-2">{data.historiaTitle}</h3>
-      <p class="text-sm text-stone-600 leading-relaxed">{data.historiaContent}</p>
-    </article>
+
+   
+      <div class="about-card-vision">
+        <div class="about-icon-wrapper-vision">
+          <div class="about-icon-circle-vision">
+            <svg class="about-icon-vision" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="52" fill="#BFEFFF"/>
+              <circle cx="60" cy="60" r="26" fill="none" stroke="#F42476" stroke-width="8"/>
+              <circle cx="60" cy="60" r="12" fill="none" stroke="#F42476" stroke-width="8"/>
+              <circle cx="60" cy="60" r="5" fill="#F42476"/>
+              <path d="M60 60L88 32" stroke="#20C8F1" stroke-width="8" stroke-linecap="round"/>
+              <path d="M82 32H94V44" fill="none" stroke="#20C8F1" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+        <div class="about-card-content">
+          <h3 class="about-card-title-vision">{data.visionTitle}</h3>
+          <p class="about-card-text">{data.visionContent}</p>
+        </div>
+      </div>
+
+ 
+      <div class="about-card-historia">
+        <div class="about-icon-wrapper-historia">
+          <div class="about-icon-circle-historia">
+            <svg class="about-icon-historia" viewBox="0 0 220 100">
+              <circle cx="35" cy="30" r="20"/>
+              <circle cx="35" cy="70" r="20"/>
+              <circle cx="185" cy="30" r="20"/>
+              <circle cx="185" cy="70" r="20"/>
+              <rect x="35" y="25" width="150" height="50" rx="25"/>
+            </svg>
+          </div>
+        </div>
+        <div class="about-card-content">
+          <h3 class="about-card-title-historia">{data.historiaTitle}</h3>
+          <p class="about-card-text">{data.historiaContent}</p>
+        </div>
+      </div>
+
+    </div>
   </div>
 </section>
