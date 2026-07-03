@@ -1,15 +1,24 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { getPetByDocumentId } from '../../lib/strapi';
+import { getAvailablePets, getPetByDocumentId } from '../../lib/strapi';
 import type { IPet } from '../../types/strapi';
+import FormularioAdopcion from '../../components/FormularioAdopcion.astro';
+import FormularioApadrinamiento from '../../components/FormularioApadrinamiento.astro';
 
 export const prerender = false;
 
 const documentId = Astro.params.documentId as string | undefined;
 let pet: IPet | undefined;
+let petOptions: Array<{ documentId: string; name: string }> = [];
 if (documentId) {
   const response = await getPetByDocumentId(documentId);
   pet = response?.data?.[0] as IPet | undefined;
+
+  const availablePets = await getAvailablePets();
+  petOptions = availablePets.data.map((currentPet) => ({
+    documentId: currentPet.documentId,
+    name: currentPet.name,
+  }));
 }
 const imageUrl = pet?.photos?.[0]?.url ?? '/images/placeholder-pet.jpg';
 const pageTitle = pet ? `${pet.name} | Detalle de mascota` : 'Mascota no encontrada';
@@ -106,6 +115,14 @@ const pageDescription = pet ? `Conoce a ${pet.name}, ${pet.species} disponible p
                     ) : null}
                   </dl>
                 </div>
+              </div>
+
+              <div class="grid gap-6 lg:grid-cols-2">
+                <FormularioAdopcion pet={{ documentId: pet.documentId, name: pet.name }} />
+                <FormularioApadrinamiento
+                  pet={{ documentId: pet.documentId, name: pet.name }}
+                  pets={petOptions}
+                />
               </div>
             </div>
           </div>
