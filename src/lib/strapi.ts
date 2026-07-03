@@ -173,6 +173,19 @@ interface RequestResult {
   message: string;
 }
 
+function extractStrapiErrorMessage(error: unknown): string | null {
+  try {
+    if (error instanceof Error) {
+      const parsed = JSON.parse(error.message);
+      const strapiMsg = (parsed as any)?.error?.message;
+      if (strapiMsg) return String(strapiMsg);
+    }
+  } catch {
+    // Not JSON, ignore
+  }
+  return null;
+}
+
 export async function createAdoptionRequest(data: CreateAdoptionRequestInput): Promise<RequestResult> {
   try {
     const adopterResponse = await strapiFetch<StrapiCollectionMinimal<StrapiEntityWithDocumentId>>(
@@ -204,9 +217,10 @@ export async function createAdoptionRequest(data: CreateAdoptionRequestInput): P
     };
   } catch (error) {
     console.error('Error creating adoption request:', error);
+    const strapiMsg = extractStrapiErrorMessage(error);
     return {
       success: false,
-      message: 'No fue posible enviar la solicitud de adopcion. Intenta nuevamente.',
+      message: strapiMsg ?? 'No fue posible enviar la solicitud de adopcion. Intenta nuevamente.',
     };
   }
 }
@@ -240,9 +254,10 @@ export async function createSponsorRequest(data: CreateSponsorRequestInput): Pro
     };
   } catch (error) {
     console.error('Error creating sponsor request:', error);
+    const strapiMsg = extractStrapiErrorMessage(error);
     return {
       success: false,
-      message: 'No fue posible enviar la solicitud de apadrinamiento. Intenta nuevamente.',
+      message: strapiMsg ?? 'No fue posible enviar la solicitud de apadrinamiento. Intenta nuevamente.',
     };
   }
 }

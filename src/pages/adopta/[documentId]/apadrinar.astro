@@ -1,0 +1,149 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import FormularioApadrinamiento from '../../../components/FormularioApadrinamiento.astro';
+import { getPetByDocumentId } from '../../../lib/strapi';
+import type { IPet } from '../../../types/strapi';
+
+export const prerender = false;
+
+const { documentId } = Astro.params;
+
+let pet: IPet | undefined;
+if (documentId) {
+  const response = await getPetByDocumentId(documentId);
+  pet = response?.data?.[0] as IPet | undefined;
+}
+
+if (!pet) {
+  return Astro.redirect('/404');
+}
+
+const seoTitle = `Apadrinar a ${pet.name} | PetVida`;
+const seoDescription = `Apadrina a ${pet.name} y ayudanos a mantenerlo mientras encuentra su hogar definitivo. Tu apoyo mensual cubre alimentacion, cuidados veterinarios y amor. Haz la diferencia!`;
+---
+
+<Layout title={seoTitle} description={seoDescription}>
+  <main class="bg-[var(--color-surface)] min-h-screen py-16">
+    <div class="max-w-6xl mx-auto px-4">
+      <nav aria-label="Breadcrumb" class="flex items-center gap-1.5 text-sm text-stone-500 flex-wrap">
+        <a href="/" class="hover:text-[var(--color-primary)] transition">Inicio</a>
+        <span aria-hidden="true" class="text-stone-300">/</span>
+        <a href="/adopta" class="hover:text-[var(--color-primary)] transition">Mascotas en adopcion</a>
+        <span aria-hidden="true" class="text-stone-300">/</span>
+        <a href={`/adopta/${pet.documentId}`} class="hover:text-[var(--color-primary)] transition">{pet.name}</a>
+        <span aria-hidden="true" class="text-stone-300">/</span>
+        <span class="text-stone-700 font-medium">Apadrinar</span>
+      </nav>
+
+      <div class="mb-10">
+        <a href={`/adopta/${pet.documentId}`} class="inline-flex items-center gap-2 text-[var(--color-primary)] hover:opacity-80 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+          </svg>
+          <span>Volver al perfil de {pet.name}</span>
+        </a>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-10 mb-16">
+        <div class="bg-white p-8 rounded-3xl shadow-sm">
+          <h2 class="text-3xl font-bold text-stone-900 mb-6 border-b pb-2 border-stone-200">En que consiste el apadrinamiento?</h2>
+
+          <div class="space-y-6 text-stone-600">
+            <p>El <strong class="text-[var(--color-primary)]">apadrinamiento</strong> es una muestra de solidaridad y una forma voluntaria de colaborar con la cual te haces participe del cambio en la vida de {pet.name}.</p>
+
+            <div class="bg-[color:var(--color-pastel)] p-6 rounded-2xl">
+              <h3 class="text-xl font-semibold text-[var(--color-primary)] mb-3">Tu aporte incluye:</h3>
+              <ul class="space-y-3">
+                <li class="flex items-start gap-3">
+                  <span class="text-[var(--color-secondary)] mt-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                  </span>
+                  <span>Un aporte economico mensual que puedes elegir segun tus posibilidades</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="text-[var(--color-secondary)] mt-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                  </span>
+                  <span>Recibiras actualizaciones periodicas sobre su evolucion</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="text-[var(--color-secondary)] mt-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                  </span>
+                  <span>Contribuiras a su bienestar mientras encuentra un hogar definitivo</span>
+                </li>
+              </ul>
+            </div>
+
+            <p>Apadrinando a {pet.name} los ayudaras a todos, ya que estaras contribuyendo a que nuestro refugio sea lo mas parecido a un hogar, mientras encuentran una familia definitiva.</p>
+
+            <div class="bg-[color:var(--color-pastel)] p-4 rounded-2xl border border-pink-200">
+              <p class="italic text-stone-500">"Recuerda que tu aporte es invaluable para la fundacion y sobre todo para los animales. Te invitamos a conocer a los beneficiarios de tu solidaridad."</p>
+            </div>
+          </div>
+
+          <div class="mt-8 pt-8 border-t border-stone-200">
+            <h3 class="text-xl font-semibold text-stone-800 mb-4">Informacion de {pet.name}</h3>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <span class="text-stone-400 text-sm block">Especie</span>
+                <span class="font-semibold text-stone-800">{pet.species}</span>
+              </div>
+              <div>
+                <span class="text-stone-400 text-sm block">Edad</span>
+                <span class="font-semibold text-stone-800">{pet.ageGroup}</span>
+              </div>
+              <div>
+                <span class="text-stone-400 text-sm block">Sexo</span>
+                <span class="font-semibold text-stone-800">{pet.gender}</span>
+              </div>
+              <div>
+                <span class="text-stone-400 text-sm block">Tamano</span>
+                <span class="font-semibold text-stone-800">{pet.size}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <FormularioApadrinamiento pet={{ documentId: pet.documentId, name: pet.name }} />
+        </div>
+      </div>
+
+      <div class="text-center mb-8">
+        <h3 class="text-2xl font-bold text-stone-900 mb-4">Como funciona el apadrinamiento?</h3>
+        <p class="text-stone-600 max-w-2xl mx-auto mb-10">Una vez recibamos tus datos, nos pondremos en contacto para formalizar el apadrinamiento y acordar los detalles.</p>
+
+        <div class="grid md:grid-cols-3 gap-6">
+          <div class="bg-white p-6 rounded-3xl shadow-sm">
+            <div class="w-14 h-14 bg-[color:var(--color-pastel)] rounded-full flex items-center justify-center mx-auto mb-4">
+              <span class="text-[var(--color-primary)] text-xl font-bold">1</span>
+            </div>
+            <h4 class="text-lg font-semibold text-stone-800 mb-2">Registra tus datos</h4>
+            <p class="text-stone-600 text-sm">Completa el formulario de contacto para iniciar el proceso de apadrinamiento.</p>
+          </div>
+          <div class="bg-white p-6 rounded-3xl shadow-sm">
+            <div class="w-14 h-14 bg-[color:var(--color-pastel)] rounded-full flex items-center justify-center mx-auto mb-4">
+              <span class="text-[var(--color-primary)] text-xl font-bold">2</span>
+            </div>
+            <h4 class="text-lg font-semibold text-stone-800 mb-2">Formalizacion</h4>
+            <p class="text-stone-600 text-sm">Te contactaremos para formalizar el acta de apadrinamiento y definir los detalles.</p>
+          </div>
+          <div class="bg-white p-6 rounded-3xl shadow-sm">
+            <div class="w-14 h-14 bg-[color:var(--color-pastel)] rounded-full flex items-center justify-center mx-auto mb-4">
+              <span class="text-[var(--color-primary)] text-xl font-bold">3</span>
+            </div>
+            <h4 class="text-lg font-semibold text-stone-800 mb-2">Apoyo continuo</h4>
+            <p class="text-stone-600 text-sm">Con tu aporte mensual ayudaras a {pet.name} y recibiras actualizaciones periodicas.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>

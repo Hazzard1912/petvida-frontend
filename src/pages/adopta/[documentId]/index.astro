@@ -1,0 +1,126 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { getPetByDocumentId } from '../../../lib/strapi';
+import type { IPet } from '../../../types/strapi';
+
+export const prerender = false;
+
+const documentId = Astro.params.documentId as string | undefined;
+let pet: IPet | undefined;
+
+if (documentId) {
+  const response = await getPetByDocumentId(documentId);
+  pet = response?.data?.[0] as IPet | undefined;
+}
+
+const imageUrl = pet?.photos?.[0]?.url ?? '/images/placeholder-pet.jpg';
+const pageTitle = pet ? `${pet.name} | Detalle de mascota` : 'Mascota no encontrada';
+const pageDescription = pet ? `Conoce a ${pet.name}, ${pet.species} disponible para adopcion en PetVida.` : 'No se encontro la mascota que buscabas.';
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <section class="py-16 bg-[var(--color-surface)] min-h-screen">
+    <div class="max-w-5xl mx-auto px-4">
+      {pet ? (
+        <div class="space-y-10">
+          <div>
+            <a href="/adopta" class="inline-flex items-center gap-2 rounded-full border border-stone-200 bg-white px-4 py-2 text-sm font-semibold text-stone-700 shadow-sm hover:bg-stone-50 transition">
+              ← Volver al catalogo
+            </a>
+          </div>
+
+          <div class="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] items-start">
+            <div class="overflow-hidden rounded-[2rem] bg-white shadow-sm">
+              <img src={imageUrl} alt={pet.name} class="h-[420px] w-full object-cover" loading="lazy" />
+            </div>
+
+            <div class="space-y-6">
+              <div class="rounded-[2rem] bg-white p-8 shadow-sm">
+                <div class="space-y-4">
+                  <div>
+                    <p class="text-sm uppercase tracking-[0.24em] text-[var(--color-primary)] font-semibold">{pet.species}</p>
+                    <h1 class="mt-2 text-4xl font-extrabold text-stone-900">{pet.name}</h1>
+                  </div>
+                  <p class="text-stone-600 leading-relaxed">{pet.description || 'No hay descripcion disponible para esta mascota aun.'}</p>
+                </div>
+
+                <div class="mt-8 grid gap-4 sm:grid-cols-2">
+                  <div class="rounded-3xl bg-[color:var(--color-pastel)] p-5">
+                    <h2 class="text-sm font-semibold uppercase tracking-[0.24em] text-stone-700">Edad</h2>
+                    <p class="mt-2 text-xl font-semibold text-stone-900">{pet.ageGroup}</p>
+                  </div>
+                  <div class="rounded-3xl bg-[color:var(--color-pastel)] p-5">
+                    <h2 class="text-sm font-semibold uppercase tracking-[0.24em] text-stone-700">Sexo</h2>
+                    <p class="mt-2 text-xl font-semibold text-stone-900">{pet.gender}</p>
+                  </div>
+                  <div class="rounded-3xl bg-[color:var(--color-pastel)] p-5">
+                    <h2 class="text-sm font-semibold uppercase tracking-[0.24em] text-stone-700">Tamano</h2>
+                    <p class="mt-2 text-xl font-semibold text-stone-900">{pet.size}</p>
+                  </div>
+                  <div class="rounded-3xl bg-[color:var(--color-pastel)] p-5">
+                    <h2 class="text-sm font-semibold uppercase tracking-[0.24em] text-stone-700">Estado</h2>
+                    <p class="mt-2 text-xl font-semibold text-stone-900">{pet.isAdopted ? 'Adoptado' : 'Disponible'}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex flex-col gap-3">
+                <a
+                  href={`/adopta/${pet.documentId}/adoptar`}
+                  class="bg-[var(--color-primary)] text-white text-center py-4 px-8 rounded-2xl font-bold hover:opacity-90 transition shadow-[0_10px_24px_rgba(244,36,118,0.2)] flex items-center justify-center gap-2 group"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:scale-110 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
+                  </svg>
+                  Adoptar a {pet.name}
+                </a>
+                <a
+                  href={`/adopta/${pet.documentId}/apadrinar`}
+                  class="border-2 border-[var(--color-secondary)] text-[var(--color-secondary)] text-center py-3 px-6 rounded-2xl font-semibold hover:bg-cyan-50 transition-colors"
+                >
+                  Apadrinar a {pet.name}
+                </a>
+              </div>
+
+              <p class="text-sm text-stone-500 text-center px-4">
+                Al enviar la solicitud estaras manifestando tu interes para que nuestro equipo te contacte y evaluar juntos el proceso.
+              </p>
+
+              <div class="rounded-3xl bg-white p-6 shadow-sm">
+                <h2 class="text-sm uppercase tracking-[0.24em] text-[var(--color-primary)] font-semibold">Informacion adicional</h2>
+                <dl class="mt-4 space-y-3 text-stone-600">
+                  <div>
+                    <dt class="font-semibold">Especie</dt>
+                    <dd>{pet.species}</dd>
+                  </div>
+                  <div>
+                    <dt class="font-semibold">Nombre</dt>
+                    <dd>{pet.name}</dd>
+                  </div>
+                  <div>
+                    <dt class="font-semibold">Edad</dt>
+                    <dd>{pet.ageGroup}</dd>
+                  </div>
+                  <div>
+                    <dt class="font-semibold">Sexo</dt>
+                    <dd>{pet.gender}</dd>
+                  </div>
+                  <div>
+                    <dt class="font-semibold">Tamano</dt>
+                    <dd>{pet.size}</dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div class="rounded-[2rem] bg-white p-12 text-center shadow-sm">
+          <h1 class="text-3xl font-semibold text-stone-900">Mascota no encontrada</h1>
+          <p class="mt-4 text-stone-600">No pudimos encontrar la mascota que buscabas. Verifica el enlace o regresa al catalogo de mascotas.</p>
+          <a href="/adopta" class="mt-8 inline-flex rounded-full bg-[var(--color-primary)] px-6 py-3 text-sm font-semibold text-white transition hover:opacity-90">Volver al catalogo</a>
+        </div>
+      )}
+    </div>
+  </section>
+</Layout>

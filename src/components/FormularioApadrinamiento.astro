@@ -1,97 +1,110 @@
 ---
 import { actions, isInputError } from 'astro:actions';
 
-interface PetOption {
-  documentId: string;
-  name: string;
-}
-
 interface Props {
   pet: {
     documentId: string;
     name: string;
   };
-  pets: PetOption[];
 }
 
-const { pet, pets } = Astro.props;
+const { pet } = Astro.props;
 const result = Astro.getActionResult(actions.createSponsorRequestAction);
 const inputErrors = isInputError(result?.error) ? result.error.fields : {};
 
-const suggestedAmounts = [40000, 50000, 80000, 100000];
+const montosSugeridos = [
+  { valor: 40000, etiqueta: '$40.000' },
+  { valor: 50000, etiqueta: '$50.000' },
+  { valor: 80000, etiqueta: '$80.000' },
+  { valor: 100000, etiqueta: '$100.000' },
+];
 ---
 
-<div class="rounded-3xl bg-white p-8 shadow-sm">
-  <h3 class="text-2xl font-bold text-stone-900">Formulario de apadrinamiento</h3>
-  <p class="mt-2 text-sm text-stone-600">Elige a quien deseas apadrinar y registra tu aporte mensual.</p>
+<div class="rounded-3xl bg-white shadow-sm overflow-hidden">
+  <div class="bg-[var(--color-primary)] text-white p-6 flex justify-between items-center">
+    <h3 class="text-xl font-bold">Formulario de apadrinamiento</h3>
+    <div class="bg-pink-700/30 rounded-full p-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
+      </svg>
+    </div>
+  </div>
 
-  {result?.data?.success === true ? (
-    <div class="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-800">
+  {result?.data?.success === true && (
+    <div class="mx-6 mt-6 rounded-2xl border border-pink-200 bg-[color:var(--color-pastel)] p-4 text-[var(--color-primary)]" role="alert">
       <p class="font-semibold">Solicitud enviada</p>
       <p class="text-sm mt-1">{result.data.message}</p>
     </div>
-  ) : null}
+  )}
 
-  {result?.data?.success === false ? (
-    <div class="mt-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-red-800">
+  {result?.data?.success === false && (
+    <div class="mx-6 mt-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-red-800" role="alert">
       <p class="font-semibold">No se pudo enviar la solicitud</p>
       <p class="text-sm mt-1">{result.data.message}</p>
     </div>
-  ) : null}
+  )}
 
-  <form method="POST" action={actions.createSponsorRequestAction} class="mt-6 space-y-4">
-    <div>
-      <label class="block text-sm font-medium text-stone-700">Que perrito o gatito deseas apadrinar</label>
-      <select name="pet" required class="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2.5">
-        {pets.map((petOption) => (
-          <option value={petOption.documentId} selected={petOption.documentId === pet.documentId}>
-            {petOption.name}
-          </option>
-        ))}
-      </select>
-      {inputErrors.pet ? <p class="mt-1 text-xs text-red-600">{inputErrors.pet.join(', ')}</p> : null}
+  <div class="p-6">
+    <div class="mb-6 flex items-center gap-4 bg-[color:var(--color-pastel)] p-4 rounded-2xl">
+      <div class="flex-1">
+        <h4 class="font-semibold text-[var(--color-primary)]">Estas apadrinando a {pet.name}</h4>
+        <p class="text-sm text-stone-500 mt-0.5">Tu generosidad cambiara su vida mientras espera una familia definitiva</p>
+      </div>
     </div>
 
-    <div>
-      <label class="block text-sm font-medium text-stone-700">Nombre completo</label>
-      <input type="text" name="name" required class="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2.5" />
-      {inputErrors.name ? <p class="mt-1 text-xs text-red-600">{inputErrors.name.join(', ')}</p> : null}
-    </div>
+    <form method="POST" action={actions.createSponsorRequestAction} class="space-y-4">
+      <input type="hidden" name="pet" value={pet.documentId} />
 
-    <div class="grid gap-4 sm:grid-cols-2">
       <div>
-        <label class="block text-sm font-medium text-stone-700">Email</label>
-        <input type="email" name="email" required class="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2.5" />
-        {inputErrors.email ? <p class="mt-1 text-xs text-red-600">{inputErrors.email.join(', ')}</p> : null}
+        <label class="block text-sm font-medium text-stone-700">Nombre completo</label>
+        <input type="text" name="name" required minlength="3" class="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2.5 focus:border-[var(--color-primary)] focus:ring focus:ring-pink-500/10 outline-none transition" placeholder="Tu nombre completo" />
+        {inputErrors.name ? <p class="mt-1 text-xs text-red-600">{inputErrors.name.join(', ')}</p> : null}
       </div>
+
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label class="block text-sm font-medium text-stone-700">Email</label>
+          <input type="email" name="email" required class="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2.5 focus:border-[var(--color-primary)] focus:ring focus:ring-pink-500/10 outline-none transition" placeholder="ejemplo@email.com" />
+          {inputErrors.email ? <p class="mt-1 text-xs text-red-600">{inputErrors.email.join(', ')}</p> : null}
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-stone-700">Telefono</label>
+          <input type="tel" name="phone" required minlength="8" class="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2.5 focus:border-[var(--color-primary)] focus:ring focus:ring-pink-500/10 outline-none transition" placeholder="000-000-0000" />
+          {inputErrors.phone ? <p class="mt-1 text-xs text-red-600">{inputErrors.phone.join(', ')}</p> : null}
+        </div>
+      </div>
+
       <div>
-        <label class="block text-sm font-medium text-stone-700">Telefono</label>
-        <input type="tel" name="phone" required class="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2.5" />
-        {inputErrors.phone ? <p class="mt-1 text-xs text-red-600">{inputErrors.phone.join(', ')}</p> : null}
+        <label class="block text-sm font-medium text-stone-700">Direccion</label>
+        <input type="text" name="address" required minlength="5" class="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2.5 focus:border-[var(--color-primary)] focus:ring focus:ring-pink-500/10 outline-none transition" placeholder="Tu direccion completa" />
+        {inputErrors.address ? <p class="mt-1 text-xs text-red-600">{inputErrors.address.join(', ')}</p> : null}
       </div>
-    </div>
 
-    <div>
-      <label class="block text-sm font-medium text-stone-700">Direccion</label>
-      <input type="text" name="address" required class="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2.5" />
-      {inputErrors.address ? <p class="mt-1 text-xs text-red-600">{inputErrors.address.join(', ')}</p> : null}
-    </div>
+      <fieldset>
+        <legend class="block text-sm font-medium text-stone-700 mb-2">Con cuanto deseas apadrinar mensualmente?</legend>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+          {montosSugeridos.map((monto) => (
+            <label class="cursor-pointer">
+              <input type="radio" name="monthlyAmount" value={monto.valor} class="peer sr-only" required />
+              <div class="text-center border border-stone-300 rounded-xl py-2.5 text-sm font-medium peer-checked:bg-[var(--color-primary)] peer-checked:text-white peer-checked:border-[var(--color-primary)] hover:bg-pink-50 transition-colors">
+                {monto.etiqueta}
+              </div>
+            </label>
+          ))}
+        </div>
+        {inputErrors.monthlyAmount ? <p class="mt-1 text-xs text-red-600">{inputErrors.monthlyAmount.join(', ')}</p> : null}
+      </fieldset>
 
-    <fieldset>
-      <legend class="block text-sm font-medium text-stone-700">Monto mensual</legend>
-      <div class="mt-2 grid grid-cols-2 gap-2">
-        {suggestedAmounts.map((amount) => (
-          <label class="cursor-pointer rounded-xl border border-stone-300 p-3 text-center text-sm font-medium hover:border-emerald-500">
-            <input type="radio" name="monthlyAmount" value={amount} class="sr-only" required />
-            ${amount.toLocaleString('es-CO')}
-          </label>
-        ))}
-      </div>
-      {inputErrors.monthlyAmount ? <p class="mt-1 text-xs text-red-600">{inputErrors.monthlyAmount.join(', ')}</p> : null}
-    </fieldset>
+      <button type="submit" class="w-full rounded-xl bg-[var(--color-primary)] px-4 py-3 font-semibold text-white transition hover:opacity-90 shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
+        </svg>
+        Enviar solicitud de apadrinamiento
+      </button>
 
-    <button type="submit" class="w-full rounded-xl bg-emerald-600 px-4 py-3 font-semibold text-white transition hover:bg-emerald-700">
-      Enviar solicitud de apadrinamiento
-    </button>
-  </form>
+      <p class="text-xs text-stone-500 text-center mt-4">
+        Nos pondremos en contacto contigo en un plazo maximo de 48 horas para formalizar el apadrinamiento.
+      </p>
+    </form>
+  </div>
 </div>
