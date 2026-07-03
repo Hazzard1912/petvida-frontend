@@ -1,10 +1,11 @@
 import type { IPet, StrapiCollectionResponse } from '../types/strapi';
 
-const STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
-const STRAPI_TOKEN = import.meta.env.STRAPI_API_TOKEN;
+const STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL ?? 'http://localhost:1337';
+const STRAPI_TOKEN = import.meta.env.STRAPI_API_TOKEN ?? '';
+const STRAPI_REQUEST_TOKEN = import.meta.env.STRAPI_REQUEST_TOKEN ?? STRAPI_TOKEN;
 
-if (!STRAPI_URL || !STRAPI_TOKEN) {
-  console.warn('⚠️ Advertencia: PUBLIC_STRAPI_URL o STRAPI_API_TOKEN no están definidos en el archivo .env');
+if (!import.meta.env.PUBLIC_STRAPI_URL || !import.meta.env.STRAPI_API_TOKEN) {
+  console.warn('⚠️ Advertencia: PUBLIC_STRAPI_URL o STRAPI_API_TOKEN no están definidos en el archivo .env. Usando valores por defecto para desarrollo.');
 }
 
 interface FetchOptions extends RequestInit {
@@ -38,6 +39,28 @@ export async function strapiFetch<T>(endpoint: string, options: FetchOptions = {
 
   if (!response.ok) {
     throw new Error(`[Strapi Fetch Error] Estado: ${response.status} - ${response.statusText}`);
+  }
+
+  return await response.json() as T;
+}
+
+async function strapiPost<T>(endpoint: string, data: unknown): Promise<T> {
+  const url = new URL(`/api/${endpoint}`, STRAPI_URL);
+
+  const headers = new Headers({
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${STRAPI_REQUEST_TOKEN}`,
+  });
+
+  const response = await fetch(url.toString(), {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ data }),
+  });
+
+  if (!response.ok) {
+    const rawError = await response.text();
+    throw new Error(rawError || `[Strapi Post Error] Estado: ${response.status}`);
   }
 
   return await response.json() as T;
@@ -115,4 +138,111 @@ export async function getPetByDocumentId(documentId: string): Promise<StrapiColl
     ...response,
     data: response.data.map(normalizePetMedia),
   };
+}
+
+interface CreateAdoptionRequestInput {
+  pet: string;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  neighborhood: string;
+  age: number;
+  adoptionReason: string;
+}
+
+interface CreateSponsorRequestInput {
+  pet: string;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  monthlyAmount: number;
+}
+
+interface StrapiCollectionMinimal<T> {
+  data: T[];
+}
+
+interface StrapiEntityWithDocumentId {
+  documentId: string;
+}
+
+interface RequestResult {
+  success: boolean;
+  message: string;
+}
+
+export async function createAdoptionRequest(data: CreateAdoptionRequestInput): Promise<RequestResult> {
+  try {
+    const adopterResponse = await strapiFetch<StrapiCollectionMinimal<StrapiEntityWithDocumentId>>(
+      `adopters?filters[email][$eq]=${encodeURIComponent(data.email)}`
+    );
+
+    let adopterDocumentId = adopterResponse.data[0]?.documentId;
+    if (!adopterDocumentId) {
+      const created = await strapiPost<{ data: StrapiEntityWithDocumentId }>('adopters', {
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        address: data.address,
+        neighborhood: data.neighborhood,
+        age: data.age,
+      });
+      adopterDocumentId = created.data.documentId;
+    }
+
+    await strapiPost('adoption-requests', {
+      pet: data.pet,
+      adopter: adopterDocumentId,
+      adoptionReason: data.adoptionReason,
+    });
+
+    return {
+      success: true,
+      message: 'Solicitud enviada con exito. Te contactaremos en un plazo maximo de 48 horas.',
+    };
+  } catch (error) {
+    console.error('Error creating adoption request:', error);
+    return {
+      success: false,
+      message: 'No fue posible enviar la solicitud de adopcion. Intenta nuevamente.',
+    };
+  }
+}
+
+export async function createSponsorRequest(data: CreateSponsorRequestInput): Promise<RequestResult> {
+  try {
+    const sponsorResponse = await strapiFetch<StrapiCollectionMinimal<StrapiEntityWithDocumentId>>(
+      `sponsors?filters[email][$eq]=${encodeURIComponent(data.email)}`
+    );
+
+    let sponsorDocumentId = sponsorResponse.data[0]?.documentId;
+    if (!sponsorDocumentId) {
+      const created = await strapiPost<{ data: StrapiEntityWithDocumentId }>('sponsors', {
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        address: data.address,
+      });
+      sponsorDocumentId = created.data.documentId;
+    }
+
+    await strapiPost('sponsor-requests', {
+      pet: data.pet,
+      sponsor: sponsorDocumentId,
+      monthlyAmount: data.monthlyAmount,
+    });
+
+    return {
+      success: true,
+      message: 'Solicitud de apadrinamiento enviada con exito. Te contactaremos pronto.',
+    };
+  } catch (error) {
+    console.error('Error creating sponsor request:', error);
+    return {
+      success: false,
+      message: 'No fue posible enviar la solicitud de apadrinamiento. Intenta nuevamente.',
+    };
+  }
 }
