@@ -4,8 +4,11 @@ export const prerender = false;
 import Layout from "../layouts/Layout.astro";
 import MisionVision from "../components/MisionVision.astro";
 import NoticiasGrid from "../components/NoticiasGrid.astro";
-import { strapiFetch } from "../lib/strapi";
-import type { StrapiSingleResponse, IHomepage } from "../types/strapi";
+import HistoriasFelices from "../components/HistoriasFelices.astro";
+import FAQ from "../components/FAQ.astro";
+import { strapiFetch, getFAQ, getHappyEndings } from "../lib/strapi";
+import type { StrapiSingleResponse, IHomepage, IPet } from "../types/strapi";
+import type { IFaq } from "../lib/strapi";
 
 const defaultHomepage: IHomepage = {
 	id: 0,
@@ -28,19 +31,29 @@ const defaultHomepage: IHomepage = {
 };
 
 let homepageData: IHomepage = defaultHomepage;
-let connectionError = false;
+let faqData: IFaq | null = null;
+let adoptedPets: IPet[] = [];
 
-try {
-	const response =
-		await strapiFetch<StrapiSingleResponse<IHomepage>>("homepage");
-	if (response?.data) {
-		homepageData = response.data;
-	}
-} catch (error) {
+const [homepageResponse, faqResponse, happyEndingsResponse] = await Promise.allSettled([
+	strapiFetch<StrapiSingleResponse<IHomepage>>("homepage"),
+	getFAQ(),
+	getHappyEndings(),
+]);
+
+if (homepageResponse.status === "fulfilled" && homepageResponse.value?.data) {
+	homepageData = homepageResponse.value.data;
+} else {
 	console.error(
 		"No se pudo conectar con Strapi. Usando datos locales de respaldo.",
 	);
-	connectionError = true;
+}
+
+if (faqResponse.status === "fulfilled" && faqResponse.value) {
+	faqData = faqResponse.value;
+}
+
+if (happyEndingsResponse.status === "fulfilled" && happyEndingsResponse.value) {
+	adoptedPets = happyEndingsResponse.value;
 }
 
 const heroTitleParts = homepageData.heroTitle
@@ -57,14 +70,6 @@ const heroTitleParts = homepageData.heroTitle
 ---
 
 <Layout title="Inicio - Rescate y Adopción Animal">
-	{
-		connectionError && (
-			<div class="fixed bottom-4 left-4 z-50 inline-flex items-center px-3 py-1.5 text-xs font-medium text-amber-800 bg-amber-100 rounded-full shadow-xs">
-				Modo offline — datos de respaldo
-			</div>
-		)
-	}
-
 	<section class="hero-section">
 		<div class="hero-blob hero-blob-right"></div>
 		<div class="hero-blob hero-blob-behind-img"></div>
@@ -125,4 +130,28 @@ const heroTitleParts = homepageData.heroTitle
 
 	<MisionVision data={homepageData} />
 	<NoticiasGrid />
+	<section class="w-screen relative left-1/2 right-1/2 -mx-[50vw] py-16" style="background: linear-gradient(180deg, #FFF5FA 0%, #FFE8F0 100%);">
+		<div class="max-w-4xl mx-auto px-4 text-center">
+			<div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-white shadow-sm mb-4">
+				<span class="text-3xl">🐾</span>
+			</div>
+			<h2 class="text-3xl sm:text-4xl font-extrabold text-stone-900 mb-3" style="font-family: var(--font-display);">
+				Listo para <span class="text-[var(--color-primary)]">cambiar una vida</span>?
+			</h2>
+			<p class="text-stone-600 max-w-xl mx-auto mb-7" style="font-family: var(--font-body);">
+				Explora nuestro catalogo y conoce a los peludos que esperan encontrar un hogar lleno de amor.
+			</p>
+			<a
+				href="/adopta"
+				class="inline-flex items-center gap-2 rounded-full bg-[var(--color-primary)] text-white px-7 py-3.5 font-semibold shadow-md hover:shadow-lg hover:opacity-90 transition" style="font-family: var(--font-ui);"
+			>
+				Ver mascotas en adopcion
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+					<path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd" />
+				</svg>
+			</a>
+		</div>
+	</section>
+	<HistoriasFelices pets={adoptedPets} />
+	<FAQ faqData={faqData} />
 </Layout>

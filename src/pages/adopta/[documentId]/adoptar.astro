@@ -18,6 +18,10 @@ if (!pet) {
   return Astro.redirect('/404');
 }
 
+if (pet.isAdopted) {
+  return Astro.redirect(`/adopta/${documentId}`);
+}
+
 const seoTitle = `Solicitar adopcion de ${pet.name} | PetVida`;
 const seoDescription = `Manifiesta tu interes para que nuestro equipo te contacte y puedas iniciar el proceso de adopcion de ${pet.name}. Completa el formulario y te guiaremos en cada paso.`;
 ---

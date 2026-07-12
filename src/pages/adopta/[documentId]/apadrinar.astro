@@ -18,6 +18,10 @@ if (!pet) {
   return Astro.redirect('/404');
 }
 
+if (pet.isAdopted) {
+  return Astro.redirect(`/adopta/${documentId}`);
+}
+
 const seoTitle = `Apadrinar a ${pet.name} | PetVida`;
 const seoDescription = `Apadrina a ${pet.name} y ayudanos a mantenerlo mientras encuentra su hogar definitivo. Tu apoyo mensual cubre alimentacion, cuidados veterinarios y amor. Haz la diferencia!`;
 ---

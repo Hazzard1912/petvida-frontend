@@ -11,6 +11,9 @@ let pet: IPet | undefined;
 if (documentId) {
   const response = await getPetByDocumentId(documentId);
   pet = response?.data?.[0] as IPet | undefined;
+  if (pet?.isAdopted) {
+    return Astro.redirect('/adopta');
+  }
 }
 
 const imageUrl = pet?.photos?.[0]?.url ?? '/images/placeholder-pet.jpg';

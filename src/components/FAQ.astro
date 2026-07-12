@@ -1,0 +1,86 @@
+---
+import { getFAQ } from "../lib/strapi";
+import type { IFaq } from "../lib/strapi";
+
+interface Props {
+  faqData?: IFaq | null;
+}
+
+const { faqData: faqDataProp } = Astro.props;
+
+let faqData: IFaq | null = faqDataProp ?? null;
+
+if (!faqData) {
+  try {
+    faqData = await getFAQ();
+  } catch (e) {
+    console.error("Error fetching FAQ data:", e);
+  }
+}
+
+const defaultData: IFaq = {
+  titulo: "Preguntas Frecuentes",
+  preguntas: [
+    {
+      pregunta: "¿Que documentos necesito para adoptar?",
+      respuesta: `<p>Para iniciar el proceso de adopcion necesitas:</p>
+<ul class='list-disc pl-5 mt-2 space-y-1'>
+<li>Documento de identidad vigente</li>
+<li>Comprobante de residencia reciente</li>
+<li>Autorizacion del propietario de la vivienda (si alquilas)</li>
+<li>Ser mayor de 18 anos</li>
+</ul>
+<p class='mt-2'>Una vez aprobada la solicitud, se firma un contrato de adopcion responsable.</p>`
+    },
+    {
+      pregunta: "¿Cuanto cuesta adoptar una mascota?",
+      respuesta: `<p>El proceso de adopcion no tiene un costo directo, pero se solicita un <strong>aporte voluntario</strong> que ayuda a cubrir gastos veterinarios, alimentacion y cuidado general de todos los peludos del refugio.</p>
+<p class='mt-2'>Las mascotas entregadas estan esterilizadas, desparasitadas, con vacunas al dia y con un examen veterinario completo.</p>`
+    },
+    {
+      pregunta: "¿Puedo devolver la mascota si no logro adaptarme?",
+      respuesta: `<p>Si. Entendemos que a veces la adaptacion no funciona como se espera. Pedimos que en ese caso <strong>nos contactes lo antes posible</strong> para coordinar la devolucion de la mascota al refugio.</p>
+<p class='mt-2'>Nunca sueltes a la mascota en la calle. Estamos para ayudarte a encontrar la mejor solucion tanto para ti como para el animal.</p>`
+    },
+    {
+      pregunta: "¿Como puedo ayudar si no puedo adoptar ni donar dinero?",
+      respuesta: `<p>Hay muchas formas de sumar a nuestra causa:</p>
+<ul class='list-disc pl-5 mt-2 space-y-1'>
+<li><strong>Dona en especie</strong>: alimento, medicinas, elementos de aseo, camas o cobijas</li>
+<li><strong>Se voluntario</strong>: paseando, socializando o cuidando a nuestros peludos</li>
+<li><strong>Comparte</strong>: difunde nuestros casos en redes sociales para que mas personas conozcan</li>
+<li><strong>Apadrina</strong>: aporta mensualmente para el sostenimiento de una mascota especifica</li>
+</ul>`
+    }
+  ]
+};
+
+const finalData: IFaq = faqData && faqData.preguntas?.length ? faqData : defaultData;
+---
+
+<section id="faq" class="py-20 bg-[var(--color-surface)]">
+  <div class="max-w-3xl mx-auto px-4">
+    <div class="text-center mb-12">
+      <p class="eyebrow text-sm uppercase tracking-[0.22em] font-semibold text-[var(--color-secondary)] font-[family-name:var(--font-ui)]">Resolvemos tus dudas</p>
+      <h2 class="mt-3 text-3xl sm:text-4xl font-extrabold text-stone-900" style="font-family: var(--font-display);">
+        {finalData.titulo}
+      </h2>
+    </div>
+
+    <div class="space-y-4">
+      {finalData.preguntas.map((item, idx) => (
+        <details class="group rounded-3xl bg-white shadow-sm border border-stone-100 overflow-hidden">
+          <summary class="faq-toggle flex items-center justify-between gap-4 cursor-pointer p-6 list-none">
+            <span class="font-semibold text-stone-800 font-[family-name:var(--font-ui)]">{item.pregunta}</span>
+            <span class="w-8 h-8 flex-shrink-0 rounded-full bg-[color:var(--color-pastel)] flex items-center justify-center transition-transform group-open:rotate-180">
+              <svg class="w-4 h-4 text-[var(--color-primary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </span>
+          </summary>
+          <div class="faq-content px-6 pb-6 text-stone-600 leading-relaxed" set:html={item.respuesta} />
+        </details>
+      ))}
+    </div>
+  </div>
+</section>

@@ -20,15 +20,21 @@ export interface IHomepage {
 
 /**
  * Estructura de datos para los artículos de Noticias (Collection Type)
+ * Renderiza contenido HTML producido por CKEditor5 (plugin: ckeditor5)
  */
 export interface INoticia {
   id: number;
   documentId: string;
-  title: string;
+  titulo: string;
   slug: string;
-  description: string;
-  content: any[]; // Formato 'blocks' nativo de Strapi 5 para texto enriquecido
-  publishedAtDate: string;
+  resumen: string;
+  contenido: string; // HTML plano producido por CKEditor5
+  fecha: string;
+  imagen?: {
+    id: number;
+    url: string;
+    alternativeText?: string | null;
+  } | null;
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
@@ -53,6 +59,29 @@ export interface IPet {
     url: string;
     alternativeText?: string | null;
   }>;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+
+/**
+ * Estructura de datos para los productos del Catalogo Solidario
+ * Cada producto se comunica con el cliente via WhatsApp (sin pasarela de pago)
+ */
+export interface IProducto {
+  id: number;
+  documentId: string;
+  nombre: string;
+  slug: string;
+  descripcion: string;
+  precio: number; // Precio en pesos colombianos (COP)
+  imagen?: {
+    id: number;
+    url: string;
+    alternativeText?: string | null;
+  } | null;
+  destacado: boolean;
+  whatsappMensaje?: string | null;
   createdAt: string;
   updatedAt: string;
   publishedAt: string;

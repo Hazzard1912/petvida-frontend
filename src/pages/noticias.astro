@@ -2,161 +2,93 @@
 export const prerender = false;
 
 import Layout from '../layouts/Layout.astro';
-import { strapiFetch } from '../lib/strapi';
-import type { StrapiCollectionResponse, INoticia } from '../types/strapi';
+import { getNoticias } from '../lib/strapi';
+import type { INoticia } from '../types/strapi';
 
-// TODO: Eliminar este array mock cuando Strapi tenga noticias creadas
-const mockNoticias: INoticia[] = [
-  {
-    id: 1,
-    documentId: '',
-    title: 'Jornada de Adopción en el Parque de los Gatos',
-    slug: 'jornada-adopcion-parque-gatos',
-    description: 'El sábado pasado realizamos una jornada de adopción en el Parque de los Gatos, en el sur de Cali. Doce peludos encontraron un hogar y decenas de familias conocieron de primera mano la labor del refugio. Agradecemos a todos los voluntarios que hicieron posible este evento.',
-    content: [],
-    publishedAtDate: '2026-05-20',
-    createdAt: '',
-    updatedAt: '',
-    publishedAt: '',
-  },
-  {
-    id: 2,
-    documentId: '',
-    title: 'Campaña de Esterilización en la Comuna 13',
-    slug: 'campana-esterilizacion-comuna-13',
-    description: 'Con el apoyo de veterinarios voluntarios y una clínica móvil, logramos esterilizar a 35 animales en situación de calle en la Comuna 13 de Cali. La jornada incluyó revisión general, vacunación y desparasitación para cada paciente.',
-    content: [],
-    publishedAtDate: '2026-05-01',
-    createdAt: '',
-    updatedAt: '',
-    publishedAt: '',
-  },
-  {
-    id: 3,
-    documentId: '',
-    title: 'Chocolate: De la Calle a un Hogar Amoroso',
-    slug: 'chocolate-historia-superacion',
-    description: 'Chocolate llegó al refugio desnutrido y asustado. Hoy, después de tres meses de rehabilitación y mucho cariño, vive feliz con su nueva familia en una finca de Jamundí. Su historia es un recordatorio de que la adopción cambia dos vidas: la del peludo y la de quien lo recibe.',
-    content: [],
-    publishedAtDate: '2026-04-15',
-    createdAt: '',
-    updatedAt: '',
-    publishedAt: '',
-  },
-  {
-    id: 4,
-    documentId: '',
-    title: 'Taller de Tenencia Responsable en Escuelas',
-    slug: 'taller-tenencia-responsable-escuelas',
-    description: 'Llevamos nuestro taller de tenencia responsable a la Institución Educativa Santa Librada. Más de 80 niños participaron en actividades lúdicas sobre cuidado animal, adopción responsable y el impacto del abandono. Formar a las nuevas generaciones es clave para un futuro sin calle.',
-    content: [],
-    publishedAtDate: '2026-03-28',
-    createdAt: '',
-    updatedAt: '',
-    publishedAt: '',
-  },
-  {
-    id: 5,
-    documentId: '',
-    title: 'Padrino del Mes: Conoce a María',
-    slug: 'padrino-del-mes-maria',
-    description: 'María es padrina de tres peludos del refugio desde hace dos años. En esta entrevista nos cuenta por qué decidió apadrinar, cómo es su vínculo con los animales y qué le diría a quien está pensando en convertirse en padrino. "Es la mejor decisión que tomé", afirma.',
-    content: [],
-    publishedAtDate: '2026-03-10',
-    createdAt: '',
-    updatedAt: '',
-    publishedAt: '',
-  },
-  {
-    id: 6,
-    documentId: '',
-    title: 'Recibimos Donación de Alimento para el Refugio',
-    slug: 'donacion-alimento-refugio',
-    description: 'La comunidad se solidarizó y donó más de 200 kilogramos de concentrado y 50 kilos de comida húmeda para los peludos del refugio. Cada grano de alimento representa el cariño de personas que creen en nuestra causa. ¡Gracias a todos los donantes!',
-    content: [],
-    publishedAtDate: '2026-02-22',
-    createdAt: '',
-    updatedAt: '',
-    publishedAt: '',
-  },
-];
-// FIN TODO
-
-let noticias: INoticia[] = mockNoticias;
-let isLoadingError = false;
+let noticias: INoticia[] = [];
 
 try {
-  const response = await strapiFetch<StrapiCollectionResponse<INoticia>>('noticias', {
-    query: {
-      'sort[0]': 'publishedAtDate:desc',
-      'pagination[pageSize]': '6',
-      'pagination[page]': '1',
-    },
-  });
-  if (response?.data?.length) {
-    noticias = response.data;
-  }
+  noticias = await getNoticias();
 } catch (error) {
-  console.error('No se pudieron cargar las noticias desde Strapi. Usando datos de respaldo.');
-  isLoadingError = true;
+  console.error('No se pudieron cargar las noticias desde Strapi.', error);
 }
 
-function formatDate(dateStr: string): string {
+const formatDate = (dateStr: string): string => {
   if (!dateStr) return '';
-  const date = new Date(dateStr);
-  const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-  return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
-}
+  return new Date(dateStr).toLocaleDateString('es-CO', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  });
+};
 ---
 
-<Layout title="Noticias - Actividades y Eventos">
-  {isLoadingError && (
-    <div class="fixed bottom-4 left-4 z-50 inline-flex items-center px-3 py-1.5 text-xs font-medium text-amber-800 bg-amber-100 rounded-full shadow-xs">
-      Modo offline — datos de respaldo
-    </div>
-  )}
+<Layout title="Noticias | PetVida" description="Entérate de las ultimas actividades, campanas y eventos de la fundacion.">
+  <section class="py-16 md:py-24 bg-[var(--color-surface)]">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="text-center mb-14">
+        <p class="eyebrow text-sm uppercase tracking-[0.22em] font-semibold text-[var(--color-secondary)] font-[family-name:var(--font-ui)]">
+          Lo que pasa en el refugio
+        </p>
+        <h1 class="mt-3 text-4xl sm:text-5xl font-extrabold text-stone-900" style="font-family: var(--font-display);">
+          Noticias
+        </h1>
+        <p class="mt-3 text-stone-600 max-w-xl mx-auto leading-relaxed" style="font-family: var(--font-body);">
+          Campañas, eventos, historias de rescate y todo lo que hacemos por nuestros peludos.
+        </p>
+      </div>
 
-  <section class="py-16 md:py-24">
-    <div class="text-center mb-14">
-      <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-stone-900">
-        Noticias
-      </h1>
-      <p class="mt-3 text-stone-600 max-w-xl mx-auto leading-relaxed">
-        Entérate de las últimas actividades, campañas y eventos de la Fundación Huellas de Esperanza.
-      </p>
-    </div>
-
-    {noticias.length > 0 ? (
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-        {noticias.map((noticia) => (
-          <article class="group bg-white rounded-2xl border border-stone-200/60 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col">
-            <div class="p-6 flex flex-col grow">
-              <time class="text-xs font-medium text-emerald-600 mb-2" datetime={noticia.publishedAtDate}>
-                {formatDate(noticia.publishedAtDate)}
-              </time>
-              <h2 class="text-base font-bold text-stone-900 mb-2 leading-snug group-hover:text-emerald-700 transition-colors">
-                {noticia.title}
-              </h2>
-              <p class="text-sm text-stone-600 leading-relaxed line-clamp-3 mb-4">
-                {noticia.description}
-              </p>
-              <a
-                href={`/noticias/${noticia.slug}`}
-                class="mt-auto inline-flex items-center gap-1 text-sm font-medium text-emerald-600 hover:text-emerald-700 transition-colors"
-              >
-                Leer más
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
-                  <path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd" />
-                </svg>
+      {noticias.length > 0 ? (
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          {noticias.map((noticia) => (
+            <article class="group bg-white rounded-3xl border border-stone-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col overflow-hidden">
+              <a href={`/noticias/${noticia.slug}`} class="block">
+                {noticia.imagen?.url ? (
+                  <div class="aspect-[16/10] overflow-hidden bg-stone-100">
+                    <img
+                      src={noticia.imagen.url}
+                      alt={noticia.imagen.alternativeText || noticia.titulo}
+                      class="w-full h-full object-cover transition duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  </div>
+                ) : (
+                  <div class="aspect-[16/10] bg-[var(--color-pastel)] flex items-center justify-center">
+                    <span class="text-4xl">🐾</span>
+                  </div>
+                )}
               </a>
-            </div>
-          </article>
-        ))}
-      </div>
-    ) : (
-      <div class="text-center py-20">
-        <p class="text-stone-500">No hay noticias disponibles por el momento.</p>
-      </div>
-    )}
+
+              <div class="p-6 flex flex-col grow">
+                <time class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)] mb-2" style="font-family: var(--font-ui);" datetime={noticia.fecha}>
+                  {formatDate(noticia.fecha)}
+                </time>
+                <h2 class="text-lg font-bold text-stone-900 mb-2 leading-snug line-clamp-2 group-hover:text-[var(--color-primary)] transition-colors" style="font-family: var(--font-title);">
+                  {noticia.titulo}
+                </h2>
+                <p class="text-sm text-stone-600 leading-relaxed line-clamp-3 mb-4" style="font-family: var(--font-body);">
+                  {noticia.resumen}
+                </p>
+                <a
+                  href={`/noticias/${noticia.slug}`}
+                  class="mt-auto inline-flex items-center gap-1 text-sm font-semibold text-[var(--color-primary)] hover:opacity-80 transition-colors"
+                  style="font-family: var(--font-ui);"
+                >
+                  Leer más
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                    <path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd" />
+                  </svg>
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-20 rounded-3xl bg-white border border-stone-100">
+          <span class="text-5xl">🐾</span>
+          <p class="mt-4 text-stone-500" style="font-family: var(--font-body);">No hay noticias disponibles por el momento.</p>
+        </div>
+      )}
+    </div>
   </section>
 </Layout>

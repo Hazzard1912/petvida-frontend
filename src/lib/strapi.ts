@@ -1,4 +1,5 @@
-import type { IPet, StrapiCollectionResponse } from '../types/strapi';
+import type { IPet, INoticia, IProducto, StrapiCollectionResponse, StrapiSingleResponse } from '../types/strapi';
+import { optimizeCloudinaryImage } from './cloudinary';
 
 const STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL ?? 'http://localhost:1337';
 const STRAPI_TOKEN = import.meta.env.STRAPI_API_TOKEN ?? '';
@@ -83,15 +84,16 @@ function normalizeMediaUrl(url?: string | null): string | undefined {
   return new URL(url.replace(/^\//, ''), base).toString();
 }
 
-function normalizePetMedia(item: any): IPet {
+function normalizePetMedia(item: any, photoWidth?: number): IPet {
   const raw = item?.attributes ? item.attributes : item;
   const photoItems = raw?.photos?.data ?? raw?.photos ?? [];
   const photos = Array.isArray(photoItems)
     ? photoItems.map((photo: any) => {
         const photoAttrs = photo?.attributes ? photo.attributes : photo;
+        const url = normalizeMediaUrl(photoAttrs?.url) ?? photoAttrs?.url;
         return {
           id: photo?.id ?? photoAttrs?.id,
-          url: normalizeMediaUrl(photoAttrs?.url) ?? photoAttrs?.url,
+          url: photoWidth ? optimizeCloudinaryImage(url, photoWidth) : url,
           alternativeText: photoAttrs?.alternativeText ?? photoAttrs?.alternative_text ?? null,
         };
       })
@@ -120,12 +122,12 @@ function normalizePetMedia(item: any): IPet {
 
 export async function getAvailablePets(): Promise<StrapiCollectionResponse<IPet>> {
   const response = await strapiFetch<StrapiCollectionResponse<any>>(
-    'pets?populate[photos][fields]=url,alternativeText&sort=publishedAt:desc'
+    'pets?filters[isAdopted][$eq]=false&populate[photos][fields]=url,alternativeText&sort=publishedAt:desc'
   );
 
   return {
     ...response,
-    data: response.data.map(normalizePetMedia),
+    data: response.data.map((item: any) => normalizePetMedia(item, 500)),
   };
 }
 
@@ -136,8 +138,116 @@ export async function getPetByDocumentId(documentId: string): Promise<StrapiColl
 
   return {
     ...response,
-    data: response.data.map(normalizePetMedia),
+    data: response.data.map((item: any) => normalizePetMedia(item, 800)),
+  }
+}
+
+export async function getHappyEndings(limit: number = 6): Promise<IPet[]> {
+  try {
+    const response = await strapiFetch<StrapiCollectionResponse<any>>(
+      `pets?filters[isAdopted][$eq]=true&filters[adoptedDated][$notNull]=true&populate[photos][fields]=url,alternativeText&sort=adoptedDated:desc&pagination[limit]=${limit}`
+    );
+    return (response?.data ?? []).map((item: any) => normalizePetMedia(item, 500));
+  } catch {
+    return [];
+  }
+}
+
+export interface IFaq {
+  titulo: string;
+  preguntas: Array<{ pregunta: string; respuesta: string }>;
+}
+
+export async function getFAQ(): Promise<IFaq | null> {
+  try {
+    const response = await strapiFetch<StrapiSingleResponse<IFaq>>(
+      'faq?populate[preguntas][fields]=pregunta,respuesta&fields=titulo'
+    );
+    return response?.data ?? null;
+  } catch {
+    return null;
+  }
+}
+
+function normalizeNoticiaMedia(item: any, imageWidth?: number): INoticia {
+  const raw = item?.attributes ? item.attributes : item;
+  const imgRaw = raw?.imagen?.data ?? raw?.imagen;
+  const img = imgRaw && (imgRaw.attributes ?? imgRaw);
+  const imgUrl = img && img.url ? (normalizeMediaUrl(img.url) ?? img.url) : null;
+
+  return {
+    id: item?.id ?? raw?.id,
+    documentId: raw?.documentId ?? raw?.document_id ?? '',
+    titulo: raw?.titulo ?? raw?.title ?? '',
+    slug: raw?.slug ?? '',
+    resumen: raw?.resumen ?? raw?.description ?? '',
+    contenido: raw?.contenido ?? raw?.content ?? '',
+    fecha: raw?.fecha ?? raw?.publishedAtDate ?? '',
+    imagen: img && imgUrl
+      ? { id: img.id, url: imageWidth ? optimizeCloudinaryImage(imgUrl, imageWidth) : imgUrl, alternativeText: img.alternativeText ?? null }
+      : null,
+    createdAt: raw?.createdAt ?? '',
+    updatedAt: raw?.updatedAt ?? '',
+    publishedAt: raw?.publishedAt ?? '',
   };
+}
+
+export async function getNoticias(): Promise<INoticia[]> {
+  try {
+    const response = await strapiFetch<StrapiCollectionResponse<any>>(
+      'noticias?populate=imagen&fields=titulo,slug,resumen,contenido,fecha&sort=fecha:desc'
+    );
+    return (response?.data ?? []).map((item: any) => normalizeNoticiaMedia(item, 600));
+  } catch {
+    return [];
+  }
+}
+
+export async function getNoticiaBySlug(slug: string): Promise<INoticia | null> {
+  try {
+    const response = await strapiFetch<StrapiCollectionResponse<any>>(
+      `noticias?filters[slug][$eq]=${encodeURIComponent(slug)}&populate=imagen&fields=titulo,slug,resumen,contenido,fecha`
+    );
+    const item = response?.data?.[0];
+    return item ? normalizeNoticiaMedia(item, 1200) : null;
+  } catch {
+    return null;
+  }
+}
+
+function normalizeProductoMedia(item: any, imageWidth?: number): IProducto {
+  const raw = item?.attributes ? item.attributes : item;
+  const imgRaw = raw?.imagen?.data ?? raw?.imagen;
+  const img = imgRaw && (imgRaw.attributes ?? imgRaw);
+  const imgUrl = img && img.url ? (normalizeMediaUrl(img.url) ?? img.url) : null;
+
+  return {
+    id: item?.id ?? raw?.id,
+    documentId: raw?.documentId ?? raw?.document_id ?? '',
+    nombre: raw?.nombre ?? '',
+    slug: raw?.slug ?? '',
+    descripcion: raw?.descripcion ?? '',
+    precio: raw?.precio ?? 0,
+    imagen: img && imgUrl
+      ? { id: img.id, url: imageWidth ? optimizeCloudinaryImage(imgUrl, imageWidth) : imgUrl, alternativeText: img.alternativeText ?? null }
+      : null,
+    destacado: raw?.destacado ?? false,
+    whatsappMensaje: raw?.whatsappMensaje ?? null,
+    createdAt: raw?.createdAt ?? '',
+    updatedAt: raw?.updatedAt ?? '',
+    publishedAt: raw?.publishedAt ?? '',
+  };
+}
+
+export async function getProductos(): Promise<IProducto[]> {
+  try {
+    const response = await strapiFetch<StrapiCollectionResponse<any>>(
+      'productos?populate=imagen&fields=nombre,slug,descripcion,precio,destacado,whatsappMensaje&sort=destacado:desc,createdAt:desc'
+    );
+    return (response?.data ?? []).map((item: any) => normalizeProductoMedia(item, 500));
+  } catch {
+    return [];
+  }
 }
 
 interface CreateAdoptionRequestInput {

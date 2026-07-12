@@ -1,0 +1,86 @@
+---
+import type { IPet } from "../types/strapi";
+
+interface Props {
+  pets: IPet[];
+}
+
+const { pets } = Astro.props;
+
+const formatAdoptionDate = (dateStr?: string | null): string => {
+  if (!dateStr) return '';
+  return new Date(dateStr).toLocaleDateString('es-CO', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  });
+};
+---
+
+{pets.length > 0 && (
+  <section class="py-20 lg:py-24 bg-white">
+    <div class="max-w-6xl mx-auto px-4">
+
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
+        <div>
+          <p class="eyebrow text-sm uppercase tracking-[0.22em] font-semibold text-[var(--color-secondary)] font-[family-name:var(--font-ui)]">
+            Nuestra huella
+          </p>
+          <h2 class="mt-2 text-3xl sm:text-4xl font-extrabold text-stone-900" style="font-family: var(--font-display);">
+            Historias con <span class="text-[var(--color-primary)]">final feliz</span>
+          </h2>
+        </div>
+        <p class="text-stone-500 max-w-sm md:text-right" style="font-family: var(--font-body);">
+          Cada adopcion es un nuevo comienzo. Conoce a algunos de los peludos que ya estan en su hogar para siempre.
+        </p>
+      </div>
+
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {pets.map((pet) => (
+          <article class="group rounded-3xl bg-white border border-stone-100 shadow-sm overflow-hidden">
+            <div class="relative aspect-[4/3] bg-stone-100 overflow-hidden">
+              {pet.photos?.[0]?.url ? (
+                <img
+                  src={pet.photos[0].url}
+                  alt={pet.photos[0].alternativeText || pet.name}
+                  class="w-full h-full object-cover transition duration-700 group-hover:scale-105"
+                  loading="lazy"
+                />
+              ) : (
+                <div class="absolute inset-0 flex items-center justify-center bg-[var(--color-pastel)]">
+                  <span class="text-7xl opacity-50">🐾</span>
+                </div>
+              )}
+            </div>
+
+            <div class="p-6">
+              <p class="text-xs font-medium uppercase tracking-[0.2em] text-[var(--color-secondary)] mb-1" style="font-family: var(--font-ui);">
+                {formatAdoptionDate(pet.adoptedDated)}
+              </p>
+              <h3 class="text-2xl font-extrabold text-stone-900 mb-2" style="font-family: var(--font-display);">
+                {pet.name}
+              </h3>
+              {pet.description && (
+                <p class="text-sm text-stone-600 leading-relaxed line-clamp-3" style="font-family: var(--font-body);">
+                  {pet.description}
+                </p>
+              )}
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div class="mt-12 text-center">
+        <a
+          href="/adopta"
+          class="inline-flex items-center gap-2 text-sm font-semibold text-[var(--color-secondary)] hover:opacity-80 transition" style="font-family: var(--font-ui);"
+        >
+          Conoce a los peludos que buscan hogar
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+            <path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+)}

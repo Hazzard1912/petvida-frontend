@@ -1,149 +1,103 @@
 ---
-import { strapiFetch } from '../lib/strapi';
-import type { StrapiCollectionResponse, INoticia } from '../types/strapi';
+import { getNoticias } from '../lib/strapi';
+import type { INoticia } from '../types/strapi';
 
-const defaultNoticias: INoticia[] = [
-  {
-    id: 1,
-    documentId: '',
-    title: 'Jornada de Adopción Exitosa en Cali',
-    slug: 'jornada-adopcion-exitosa',
-    description: 'Más de 15 peludos encontraron un hogar en nuestra última jornada de adopción. La comunidad respondió con mucho cariño y compromiso.',
-    content: [],
-    publishedAtDate: '2026-05-15',
-    createdAt: '',
-    updatedAt: '',
-    publishedAt: '',
-  },
-  {
-    id: 2,
-    documentId: '',
-    title: 'Campaña de Esterilización Gratuita',
-    slug: 'campana-esterilizacion',
-    description: 'Gracias a nuestros aliados veterinarios, logramos esterilizar a 40 animales en situación de calle durante la última semana.',
-    content: [],
-    publishedAtDate: '2026-04-28',
-    createdAt: '',
-    updatedAt: '',
-    publishedAt: '',
-  },
-  {
-    id: 3,
-    documentId: '',
-    title: 'Nuevos Padrinos se Sumaron al Refugio',
-    slug: 'nuevos-padrinos',
-    description: 'Tres nuevas empresas locales se unieron como padrinos, asegurando alimento y atención veterinaria por los próximos seis meses.',
-    content: [],
-    publishedAtDate: '2026-04-10',
-    createdAt: '',
-    updatedAt: '',
-    publishedAt: '',
-  },
-];
-
-let noticias: INoticia[] = defaultNoticias;
-let isLoadingError = false;
+let noticias: INoticia[] = [];
 
 try {
-  const response = await strapiFetch<StrapiCollectionResponse<INoticia>>('noticias', {
-    query: {
-      'sort[0]': 'publishedAtDate:desc',
-      'pagination[pageSize]': '3',
-      'pagination[page]': '1',
-    },
-  });
-  if (response?.data?.length) {
-    noticias = response.data;
-  }
+  const all = await getNoticias();
+  noticias = all.slice(0, 3);
 } catch (error) {
   console.error('No se pudieron cargar las noticias. Usando datos de respaldo.');
-  isLoadingError = true;
 }
 
-function formatDate(dateStr: string): string {
+const formatDate = (dateStr: string): string => {
   if (!dateStr) return '';
-  const date = new Date(dateStr);
-  const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-  return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
-}
+  return new Date(dateStr).toLocaleDateString('es-CO', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  });
+};
 ---
 
 <section class="w-screen relative left-1/2 right-1/2 -mx-[50vw] py-20 md:py-28 lg:py-32 pb-0" style="background-color: #FFF5FA;">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    
-   
+
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-16">
       <div class="flex items-center gap-3">
         <svg class="w-7 h-7 md:w-8 md:h-8" viewBox="0 0 24 24" fill="currentColor" style="color: #F42476;">
           <path d="M12 2c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zm0 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-.6 0-1 .4-1 1s.4 1 1 1 1-.4 1-1-.4-1-1-1zm12 0c-.6 0-1 .4-1 1s.4 1 1 1 1-.4 1-1-.4-1-1-1z"/>
         </svg>
-        <h2 class="text-4xl md:text-5xl font-extrabold" style="color: #F42476;">
+        <h2 class="text-4xl md:text-5xl font-extrabold" style="color: #F42476; font-family: var(--font-display);">
           Noticias
         </h2>
       </div>
       <a
         href="/noticias"
         class="hidden md:inline-flex items-center gap-2 text-base font-bold transition-colors hover:opacity-80"
-        style="color: #20C8F1;"
+        style="color: #20C8F1; font-family: var(--font-ui);"
       >
         Ver todas las noticias →
       </a>
     </div>
 
-    {isLoadingError && (
-      <div class="mb-6 inline-flex items-center px-4 py-2 text-sm font-medium text-amber-800 rounded-full" style="background-color: #FFF3E0;">
-        Mostrando noticias de respaldo
+    {noticias.length > 0 ? (
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+        {noticias.map((noticia) => (
+          <article class="bg-white rounded-3xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col border border-stone-100">
+            <a href={`/noticias/${noticia.slug}`} class="block">
+              {noticia.imagen?.url ? (
+                <div class="w-full h-44 overflow-hidden bg-stone-100">
+                  <img
+                    src={noticia.imagen.url}
+                    alt={noticia.imagen.alternativeText || noticia.titulo}
+                    class="w-full h-full object-cover transition duration-500 hover:scale-105"
+                    loading="lazy"
+                  />
+                </div>
+              ) : (
+                <div class="w-full h-44 flex items-center justify-center" style="background: linear-gradient(135deg, #FFCBDE, #FFC1D5);">
+                  <span class="text-5xl">🐾</span>
+                </div>
+              )}
+            </a>
+
+            <div class="p-6 flex flex-col flex-grow">
+              <time class="text-xs font-bold mb-3 uppercase tracking-[0.18em]" style="color: #F42476; font-family: var(--font-ui);" datetime={noticia.fecha}>
+                {formatDate(noticia.fecha)}
+              </time>
+
+              <h3 class="text-lg font-bold mb-2 line-clamp-2" style="color: #1a1a1a; font-family: var(--font-title);">
+                {noticia.titulo}
+              </h3>
+
+              <p class="text-sm leading-relaxed mb-4 flex-grow line-clamp-2" style="color: #666; font-family: var(--font-body);">
+                {noticia.resumen}
+              </p>
+
+              <a
+                href={`/noticias/${noticia.slug}`}
+                class="inline-flex items-center gap-1 text-sm font-bold transition-colors hover:opacity-80 w-fit"
+                style="color: #F42476; font-family: var(--font-ui);"
+              >
+                Leer más →
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <div class="text-center py-16">
+        <p class="text-stone-500" style="font-family: var(--font-body);">No hay noticias disponibles por el momento.</p>
       </div>
     )}
 
-   
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-      {noticias.map((noticia) => (
-        <article class="bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col">
-          
-          <!-- Imagen superior (pequeña) -->
-          <div class="w-full h-40 md:h-44 overflow-hidden bg-gradient-to-br from-blue-400 via-blue-300 to-blue-200 flex items-center justify-center">
-            <svg class="w-16 h-16 opacity-25" viewBox="0 0 24 24" fill="currentColor" style="color: white;">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
-            </svg>
-          </div>
-
-          <!-- Contenido -->
-          <div class="p-6 md:p-5 flex flex-col flex-grow">
-            <!-- Fecha -->
-            <time class="text-xs font-bold mb-3" style="color: #F42476;" datetime={noticia.publishedAtDate}>
-              {formatDate(noticia.publishedAtDate)}
-            </time>
-            
-            <!-- Título -->
-            <h3 class="text-lg md:text-base font-bold mb-2 line-clamp-2" style="color: #1a1a1a;">
-              {noticia.title}
-            </h3>
-            
-            <!-- Descripción -->
-            <p class="text-sm leading-relaxed mb-4 flex-grow line-clamp-2" style="color: #666;">
-              {noticia.description}
-            </p>
-            
-            <!-- Enlace -->
-            <a
-              href={`/noticias/${noticia.slug}`}
-              class="inline-flex items-center gap-1 text-sm font-bold transition-colors hover:opacity-80 w-fit"
-              style="color: #F42476;"
-            >
-              Leer más →
-            </a>
-          </div>
-        </article>
-      ))}
-    </div>
-
-   
     <div class="mt-10 text-center md:hidden">
       <a
         href="/noticias"
         class="inline-flex items-center gap-2 text-base font-bold transition-colors hover:opacity-80"
-        style="color: #20C8F1;"
+        style="color: #20C8F1; font-family: var(--font-ui);"
       >
         Ver todas las noticias →
       </a>
