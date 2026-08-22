@@ -259,6 +259,7 @@ interface CreateAdoptionRequestInput {
   address: string;
   neighborhood: string;
   age: number;
+  convivencia: 'Solo' | 'Con otros';
   adoptionReason: string;
 }
 
@@ -319,6 +320,7 @@ export async function createAdoptionRequest(data: CreateAdoptionRequestInput): P
     await strapiPost('adoption-requests', {
       pet: data.pet,
       adopter: adopterDocumentId,
+      convivencia: data.convivencia,
       adoptionReason: data.adoptionReason,
     });
 

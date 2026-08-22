@@ -12,9 +12,10 @@ export const createAdoptionRequestAction = defineAction({
     address: z.string().min(5, 'La direccion debe tener al menos 5 caracteres'),
     neighborhood: z.string().min(2, 'El barrio es obligatorio'),
     age: z.coerce.number().int().min(18, 'Debes ser mayor de edad para continuar'),
+    convivencia: z.enum(['Solo', 'Con otros']),
     adoptionReason: z.string().min(10, 'Cuentanos un poco mas sobre tu interes de adopcion').max(1000),
   }),
-  async handler({ pet, name, email, phone, address, neighborhood, age, adoptionReason }) {
+  async handler({ pet, name, email, phone, address, neighborhood, age, convivencia, adoptionReason }) {
     return createAdoptionRequest({
       pet,
       name,
@@ -23,6 +24,7 @@ export const createAdoptionRequestAction = defineAction({
       address,
       neighborhood,
       age,
+      convivencia,
       adoptionReason,
     });
   },

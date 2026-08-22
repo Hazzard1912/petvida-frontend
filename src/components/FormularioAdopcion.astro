@@ -142,6 +142,30 @@ const inputErrors = isInputError(result?.error) ? result.error.fields : {};
           </div>
 
           <div>
+            <label
+              class="block text-sm font-medium text-stone-700"
+              for="convivencia"
+            >
+              Convivencia
+            </label>
+            <select
+              id="convivencia"
+              name="convivencia"
+              required
+              class="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2.5 focus:border-[var(--color-primary)] focus:ring focus:ring-pink-500/10 outline-none transition"
+            >
+              <option value="">Selecciona una opcion</option>
+              <option value="Solo">Vivo solo/a</option>
+              <option value="Con otros">Vivo con otras personas</option>
+            </select>
+            {inputErrors.convivencia ? (
+              <p class="mt-1 text-xs text-red-600">
+                {inputErrors.convivencia.join(", ")}
+              </p>
+            ) : null}
+          </div>
+
+          <div>
             <label class="block text-sm font-medium text-stone-700">
               Direccion
             </label>

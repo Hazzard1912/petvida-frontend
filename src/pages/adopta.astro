@@ -10,7 +10,6 @@ const selectedEspecie = requestUrl.searchParams.get("especie") ?? "";
 const selectedTamano = requestUrl.searchParams.get("tamano") ?? "";
 const selectedEdad = requestUrl.searchParams.get("edad") ?? "";
 const selectedSexo = requestUrl.searchParams.get("sexo") ?? "";
-const selectedConvivencia = requestUrl.searchParams.get("convivencia") ?? "";
 
 const response = await getAvailablePets();
 const allPets = response?.data ?? [];
@@ -20,7 +19,6 @@ const filters = {
   tamano: ["pequeño", "mediano", "grande"],
   edad: ["cachorro", "joven", "adulto", "senior"],
   sexo: ["macho", "hembra"],
-  convivencia: ["Solo", "Con otros"],
 };
 
 const filterLabels = {
@@ -28,7 +26,6 @@ const filterLabels = {
   tamano: "Tamaño",
   edad: "Edad",
   sexo: "Sexo",
-  convivencia: "Convivencia",
 };
 
 const capitalize = (value: string) =>
@@ -39,8 +36,6 @@ const filteredPets = allPets.filter((pet: IPet) => {
   if (selectedTamano && pet.size !== selectedTamano) return false;
   if (selectedEdad && pet.ageGroup !== selectedEdad) return false;
   if (selectedSexo && pet.gender !== selectedSexo) return false;
-  if (selectedConvivencia && pet.convivencia !== selectedConvivencia)
-    return false;
   return true;
 });
 
@@ -95,9 +90,7 @@ const pageDescription =
                       ? selectedTamano
                       : key === "edad"
                         ? selectedEdad
-                        : key === "sexo"
-                          ? selectedSexo
-                          : selectedConvivencia
+                        : selectedSexo
                 }
                 class="filter-select"
               >
