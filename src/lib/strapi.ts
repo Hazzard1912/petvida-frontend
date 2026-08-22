@@ -108,6 +108,7 @@ function normalizePetMedia(item: any, photoWidth?: number): IPet {
     ageGroup: raw?.ageGroup ?? raw?.age_group ?? 'adulto',
     gender: raw?.gender ?? raw?.sexo ?? 'macho',
     size: raw?.size ?? raw?.tamano ?? 'mediano',
+    convivencia: raw?.convivencia ?? 'Solo',
     isAdopted: raw?.isAdopted ?? raw?.is_adopted ?? false,
     adoptedDated: raw?.adoptedDated ?? raw?.adopted_dated ?? null,
     estadoInventario: raw?.estadoInventario ?? raw?.estado_inventario ?? undefined,

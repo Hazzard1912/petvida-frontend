@@ -1,5 +1,5 @@
 ---
-import { actions, isInputError } from 'astro:actions';
+import { actions, isInputError } from "astro:actions";
 
 interface Props {
   pet: {
@@ -14,154 +14,371 @@ const inputErrors = isInputError(result?.error) ? result.error.fields : {};
 ---
 
 <div class="rounded-3xl bg-white shadow-sm overflow-hidden">
-  <div class="bg-[var(--color-primary)] text-white p-6 flex justify-between items-center">
+  <div
+    class="bg-[var(--color-primary)] text-white p-6 flex justify-between items-center"
+  >
     <h3 class="text-xl font-bold">Solicitud de adopcion</h3>
     <div class="bg-pink-700/30 rounded-full p-2">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-        <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-5 w-5"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+        <path
+          fill-rule="evenodd"
+          d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+          clip-rule="evenodd"></path>
       </svg>
     </div>
   </div>
 
-  {result?.data?.success === true ? (
-    <div class="p-8 text-center space-y-4">
-      <div class="flex justify-center">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-[var(--color-secondary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      </div>
-      <h4 class="text-xl font-semibold text-stone-800">Solicitud enviada</h4>
-      <p class="text-stone-600">{result.data.message}</p>
-      <div class="pt-2">
-        <a href="/adopta" class="inline-block rounded-full bg-[color:var(--color-pastel)] text-[var(--color-primary)] px-5 py-2 font-semibold hover:opacity-80 transition">
-          Ver mas mascotas en adopcion
-        </a>
-      </div>
-    </div>
-  ) : (
-    <>
-      {result?.data?.success === false && (
-        <div class="mx-6 mt-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-red-800" role="alert">
-          <p class="font-semibold">No se pudo enviar la solicitud</p>
-          <p class="text-sm mt-1">{result.data.message}</p>
-        </div>
-      )}
-
-      <form id="adoption-form" method="POST" action={actions.createAdoptionRequestAction} class="p-6 space-y-4">
-        <input type="hidden" name="pet" value={pet.documentId} />
-
-        <div>
-          <label class="block text-sm font-medium text-stone-700">Nombre completo</label>
-          <input type="text" name="name" required minlength="3" class="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2.5 focus:border-[var(--color-primary)] focus:ring focus:ring-pink-500/10 outline-none transition" placeholder="Tu nombre completo" />
-          {inputErrors.name ? <p class="mt-1 text-xs text-red-600">{inputErrors.name.join(', ')}</p> : null}
-        </div>
-
-        <div class="grid gap-4 sm:grid-cols-2">
-          <div>
-            <label class="block text-sm font-medium text-stone-700">Email</label>
-            <input type="email" name="email" required class="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2.5 focus:border-[var(--color-primary)] focus:ring focus:ring-pink-500/10 outline-none transition" placeholder="ejemplo@email.com" />
-            {inputErrors.email ? <p class="mt-1 text-xs text-red-600">{inputErrors.email.join(', ')}</p> : null}
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-stone-700">Telefono</label>
-            <input type="tel" name="phone" required minlength="8" class="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2.5 focus:border-[var(--color-primary)] focus:ring focus:ring-pink-500/10 outline-none transition" placeholder="000-000-0000" />
-            {inputErrors.phone ? <p class="mt-1 text-xs text-red-600">{inputErrors.phone.join(', ')}</p> : null}
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-stone-700">Direccion</label>
-          <input type="text" name="address" required minlength="5" class="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2.5 focus:border-[var(--color-primary)] focus:ring focus:ring-pink-500/10 outline-none transition" placeholder="Tu direccion completa" />
-          {inputErrors.address ? <p class="mt-1 text-xs text-red-600">{inputErrors.address.join(', ')}</p> : null}
-        </div>
-
-        <div class="grid gap-4 sm:grid-cols-2">
-          <div>
-            <label class="block text-sm font-medium text-stone-700">Barrio de residencia</label>
-            <input type="text" name="neighborhood" required minlength="2" class="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2.5 focus:border-[var(--color-primary)] focus:ring focus:ring-pink-500/10 outline-none transition" placeholder="Tu barrio" />
-            {inputErrors.neighborhood ? <p class="mt-1 text-xs text-red-600">{inputErrors.neighborhood.join(', ')}</p> : null}
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-stone-700">Edad</label>
-            <input type="number" name="age" required min="18" class="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2.5 focus:border-[var(--color-primary)] focus:ring focus:ring-pink-500/10 outline-none transition" placeholder="Debes ser mayor de 18" />
-            {inputErrors.age ? <p class="mt-1 text-xs text-red-600">{inputErrors.age.join(', ')}</p> : null}
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-stone-700">Por que deseas adoptar a {pet.name}?</label>
-          <textarea name="adoptionReason" rows="4" required minlength="10" maxlength="1000" class="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2.5 focus:border-[var(--color-primary)] focus:ring focus:ring-pink-500/10 outline-none transition resize-none" placeholder={`Cuentanos por que ${pet.name} seria perfecto para tu hogar...`}></textarea>
-          {inputErrors.adoptionReason ? <p class="mt-1 text-xs text-red-600">{inputErrors.adoptionReason.join(', ')}</p> : null}
-        </div>
-
-        <button id="open-modal-btn" type="button" class="w-full rounded-xl bg-[var(--color-primary)] px-4 py-3 font-semibold text-white transition hover:opacity-90 shadow-md hover:shadow-lg flex items-center justify-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
+  {
+    result?.data?.success === true ? (
+      <div class="p-8 text-center space-y-4">
+        <div class="flex justify-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-20 w-20 text-[var(--color-secondary)]"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
           </svg>
-          Enviar solicitud de adopcion
-        </button>
-      </form>
-    </>
-  )}
+        </div>
+        <h4 class="text-xl font-semibold text-stone-800">Solicitud enviada</h4>
+        <p class="text-stone-600">{result.data.message}</p>
+        <div class="pt-2">
+          <a
+            href="/adopta"
+            class="inline-block rounded-full bg-[color:var(--color-pastel)] text-[var(--color-primary)] px-5 py-2 font-semibold hover:opacity-80 transition"
+          >
+            Ver mas mascotas en adopcion
+          </a>
+        </div>
+      </div>
+    ) : (
+      <>
+        {result?.data?.success === false && (
+          <div
+            class="mx-6 mt-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-red-800"
+            role="alert"
+          >
+            <p class="font-semibold">No se pudo enviar la solicitud</p>
+            <p class="text-sm mt-1">{result.data.message}</p>
+          </div>
+        )}
+
+        <form
+          id="adoption-form"
+          method="POST"
+          action={actions.createAdoptionRequestAction}
+          class="p-6 space-y-4"
+        >
+          <input type="hidden" name="pet" value={pet.documentId} />
+
+          <div>
+            <label class="block text-sm font-medium text-stone-700">
+              Nombre completo
+            </label>
+            <input
+              type="text"
+              name="name"
+              required
+              minlength="3"
+              class="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2.5 focus:border-[var(--color-primary)] focus:ring focus:ring-pink-500/10 outline-none transition"
+              placeholder="Tu nombre completo"
+            />
+            {inputErrors.name ? (
+              <p class="mt-1 text-xs text-red-600">
+                {inputErrors.name.join(", ")}
+              </p>
+            ) : null}
+          </div>
+
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label class="block text-sm font-medium text-stone-700">
+                Email
+              </label>
+              <input
+                type="email"
+                name="email"
+                required
+                class="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2.5 focus:border-[var(--color-primary)] focus:ring focus:ring-pink-500/10 outline-none transition"
+                placeholder="ejemplo@email.com"
+              />
+              {inputErrors.email ? (
+                <p class="mt-1 text-xs text-red-600">
+                  {inputErrors.email.join(", ")}
+                </p>
+              ) : null}
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-stone-700">
+                Telefono
+              </label>
+              <input
+                type="tel"
+                name="phone"
+                required
+                minlength="8"
+                class="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2.5 focus:border-[var(--color-primary)] focus:ring focus:ring-pink-500/10 outline-none transition"
+                placeholder="000-000-0000"
+              />
+              {inputErrors.phone ? (
+                <p class="mt-1 text-xs text-red-600">
+                  {inputErrors.phone.join(", ")}
+                </p>
+              ) : null}
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-stone-700">
+              Direccion
+            </label>
+            <input
+              type="text"
+              name="address"
+              required
+              minlength="5"
+              class="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2.5 focus:border-[var(--color-primary)] focus:ring focus:ring-pink-500/10 outline-none transition"
+              placeholder="Tu direccion completa"
+            />
+            {inputErrors.address ? (
+              <p class="mt-1 text-xs text-red-600">
+                {inputErrors.address.join(", ")}
+              </p>
+            ) : null}
+          </div>
+
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label class="block text-sm font-medium text-stone-700">
+                Barrio de residencia
+              </label>
+              <input
+                type="text"
+                name="neighborhood"
+                required
+                minlength="2"
+                class="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2.5 focus:border-[var(--color-primary)] focus:ring focus:ring-pink-500/10 outline-none transition"
+                placeholder="Tu barrio"
+              />
+              {inputErrors.neighborhood ? (
+                <p class="mt-1 text-xs text-red-600">
+                  {inputErrors.neighborhood.join(", ")}
+                </p>
+              ) : null}
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-stone-700">
+                Edad
+              </label>
+              <input
+                type="number"
+                name="age"
+                required
+                min="18"
+                class="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2.5 focus:border-[var(--color-primary)] focus:ring focus:ring-pink-500/10 outline-none transition"
+                placeholder="Debes ser mayor de 18"
+              />
+              {inputErrors.age ? (
+                <p class="mt-1 text-xs text-red-600">
+                  {inputErrors.age.join(", ")}
+                </p>
+              ) : null}
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-stone-700">
+              Por que deseas adoptar a {pet.name}?
+            </label>
+            <textarea
+              name="adoptionReason"
+              rows="4"
+              required
+              minlength="10"
+              maxlength="1000"
+              class="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2.5 focus:border-[var(--color-primary)] focus:ring focus:ring-pink-500/10 outline-none transition resize-none"
+              placeholder={`Cuentanos por que ${pet.name} seria perfecto para tu hogar...`}
+            />
+            {inputErrors.adoptionReason ? (
+              <p class="mt-1 text-xs text-red-600">
+                {inputErrors.adoptionReason.join(", ")}
+              </p>
+            ) : null}
+          </div>
+
+          <button
+            id="open-modal-btn"
+            type="button"
+            class="w-full rounded-xl bg-[var(--color-primary)] px-4 py-3 font-semibold text-white transition hover:opacity-90 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            Enviar solicitud de adopcion
+          </button>
+        </form>
+      </>
+    )
+  }
 </div>
 
-<div id="adoption-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-  <div id="modal-backdrop" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+<div
+  id="adoption-modal"
+  class="fixed inset-0 z-50 hidden items-center justify-center p-4"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="modal-title"
+>
+  <div
+    id="modal-backdrop"
+    class="absolute inset-0 bg-black/60 backdrop-blur-sm"
+  >
+  </div>
 
-  <div class="relative bg-white rounded-3xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
-    <div class="bg-[var(--color-primary)] rounded-t-3xl px-6 py-4 flex items-start gap-3">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-white flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+  <div
+    class="relative bg-white rounded-3xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto"
+  >
+    <div
+      class="bg-[var(--color-primary)] rounded-t-3xl px-6 py-4 flex items-start gap-3"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-7 w-7 text-white flex-shrink-0 mt-0.5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
+        ></path>
       </svg>
       <div>
-        <h2 id="modal-title" class="text-white font-bold text-lg leading-tight">Antes de continuar, ten en cuenta...</h2>
-        <p class="text-pink-100 text-sm mt-1">Enviar este formulario <strong class="text-white">NO significa que la mascota ya es tuya.</strong></p>
+        <h2 id="modal-title" class="text-white font-bold text-lg leading-tight">
+          Antes de continuar, ten en cuenta...
+        </h2>
+        <p class="text-pink-100 text-sm mt-1">
+          Enviar este formulario <strong class="text-white"
+            >NO significa que la mascota ya es tuya.</strong
+          >
+        </p>
       </div>
     </div>
 
     <div class="px-6 py-5">
-      <p class="text-stone-600 mb-5">Este formulario es una <strong class="text-stone-900">solicitud de contacto</strong>. Al enviarlo, nuestro equipo se comunicara contigo para iniciar un proceso de evaluacion. La adopcion se completa unicamente despues de seguir todos los pasos:</p>
+      <p class="text-stone-600 mb-5">
+        Este formulario es una <strong class="text-stone-900"
+          >solicitud de contacto</strong
+        >. Al enviarlo, nuestro equipo se comunicara contigo para iniciar un
+        proceso de evaluacion. La adopcion se completa unicamente despues de
+        seguir todos los pasos:
+      </p>
 
       <ol class="space-y-4">
         <li class="flex gap-3 items-start">
-          <span class="flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-full bg-[color:var(--color-pastel)] text-[var(--color-primary)] font-bold text-sm">1</span>
+          <span
+            class="flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-full bg-[color:var(--color-pastel)] text-[var(--color-primary)] font-bold text-sm"
+            >1</span
+          >
           <div>
             <p class="font-semibold text-stone-800 text-sm">Revision inicial</p>
-            <p class="text-stone-500 text-sm">Validamos tu informacion y te contactamos en maximo 48 horas.</p>
+            <p class="text-stone-500 text-sm">
+              Validamos tu informacion y te contactamos en maximo 48 horas.
+            </p>
           </div>
         </li>
         <li class="flex gap-3 items-start">
-          <span class="flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-full bg-[color:var(--color-pastel)] text-[var(--color-primary)] font-bold text-sm">2</span>
+          <span
+            class="flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-full bg-[color:var(--color-pastel)] text-[var(--color-primary)] font-bold text-sm"
+            >2</span
+          >
           <div>
-            <p class="font-semibold text-stone-800 text-sm">Entrevista y visita al hogar</p>
-            <p class="text-stone-500 text-sm">Evaluamos que el ambiente sea adecuado para la mascota.</p>
+            <p class="font-semibold text-stone-800 text-sm">
+              Entrevista y visita al hogar
+            </p>
+            <p class="text-stone-500 text-sm">
+              Evaluamos que el ambiente sea adecuado para la mascota.
+            </p>
           </div>
         </li>
         <li class="flex gap-3 items-start">
-          <span class="flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-full bg-[color:var(--color-pastel)] text-[var(--color-primary)] font-bold text-sm">3</span>
+          <span
+            class="flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-full bg-[color:var(--color-pastel)] text-[var(--color-primary)] font-bold text-sm"
+            >3</span
+          >
           <div>
-            <p class="font-semibold text-stone-800 text-sm">Periodo de adaptacion</p>
-            <p class="text-stone-500 text-sm">Si todo avanza bien, inicias un periodo de convivencia mientras se completan los tramites.</p>
+            <p class="font-semibold text-stone-800 text-sm">
+              Periodo de adaptacion
+            </p>
+            <p class="text-stone-500 text-sm">
+              Si todo avanza bien, inicias un periodo de convivencia mientras se
+              completan los tramites.
+            </p>
           </div>
         </li>
         <li class="flex gap-3 items-start">
-          <span class="flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-full bg-[color:var(--color-pastel)] text-[var(--color-primary)] font-bold text-sm">4</span>
+          <span
+            class="flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-full bg-[color:var(--color-pastel)] text-[var(--color-primary)] font-bold text-sm"
+            >4</span
+          >
           <div>
             <p class="font-semibold text-stone-800 text-sm">Adopcion oficial</p>
-            <p class="text-stone-500 text-sm">Firmamos el contrato de adopcion y la mascota pasa oficialmente a tu familia.</p>
+            <p class="text-stone-500 text-sm">
+              Firmamos el contrato de adopcion y la mascota pasa oficialmente a
+              tu familia.
+            </p>
           </div>
         </li>
       </ol>
     </div>
 
     <div class="px-6 pb-6 flex flex-col sm:flex-row gap-3 justify-end">
-      <button id="modal-cancel-btn" type="button" class="px-5 py-2.5 rounded-xl border border-stone-300 text-stone-700 font-semibold hover:bg-stone-50 transition-colors">
+      <button
+        id="modal-cancel-btn"
+        type="button"
+        class="px-5 py-2.5 rounded-xl border border-stone-300 text-stone-700 font-semibold hover:bg-stone-50 transition-colors"
+      >
         Cancelar
       </button>
-      <button id="modal-confirm-btn" type="button" class="px-5 py-2.5 rounded-xl bg-[var(--color-primary)] text-white font-semibold hover:opacity-90 transition flex items-center gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+      <button
+        id="modal-confirm-btn"
+        type="button"
+        class="px-5 py-2.5 rounded-xl bg-[var(--color-primary)] text-white font-semibold hover:opacity-90 transition flex items-center gap-2"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-4 w-4"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+            clip-rule="evenodd"></path>
         </svg>
         Entiendo, enviar mi solicitud
       </button>
@@ -170,41 +387,47 @@ const inputErrors = isInputError(result?.error) ? result.error.fields : {};
 </div>
 
 <script>
-  const modal = document.getElementById('adoption-modal') as HTMLElement;
-  const form = document.getElementById('adoption-form') as HTMLFormElement;
-  const openBtn = document.getElementById('open-modal-btn') as HTMLButtonElement;
-  const cancelBtn = document.getElementById('modal-cancel-btn') as HTMLButtonElement;
-  const confirmBtn = document.getElementById('modal-confirm-btn') as HTMLButtonElement;
-  const backdrop = document.getElementById('modal-backdrop') as HTMLElement;
+  const modal = document.getElementById("adoption-modal") as HTMLElement;
+  const form = document.getElementById("adoption-form") as HTMLFormElement;
+  const openBtn = document.getElementById(
+    "open-modal-btn",
+  ) as HTMLButtonElement;
+  const cancelBtn = document.getElementById(
+    "modal-cancel-btn",
+  ) as HTMLButtonElement;
+  const confirmBtn = document.getElementById(
+    "modal-confirm-btn",
+  ) as HTMLButtonElement;
+  const backdrop = document.getElementById("modal-backdrop") as HTMLElement;
 
   if (modal && form && openBtn && cancelBtn && confirmBtn && backdrop) {
     function openModal() {
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-      document.body.style.overflow = 'hidden';
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+      document.body.style.overflow = "hidden";
     }
 
     function closeModal() {
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
-      document.body.style.overflow = '';
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+      document.body.style.overflow = "";
     }
 
-    openBtn.addEventListener('click', () => {
+    openBtn.addEventListener("click", () => {
       if (!form.reportValidity()) return;
       openModal();
     });
 
-    cancelBtn.addEventListener('click', closeModal);
-    backdrop.addEventListener('click', closeModal);
+    cancelBtn.addEventListener("click", closeModal);
+    backdrop.addEventListener("click", closeModal);
 
-    confirmBtn.addEventListener('click', () => {
+    confirmBtn.addEventListener("click", () => {
       closeModal();
       form.requestSubmit();
     });
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !modal.classList.contains("hidden")) {
         closeModal();
       }
     });
