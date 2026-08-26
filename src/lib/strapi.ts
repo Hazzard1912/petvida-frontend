@@ -108,6 +108,7 @@ function normalizePetMedia(item: any, photoWidth?: number): IPet {
     ageGroup: raw?.ageGroup ?? raw?.age_group ?? 'adulto',
     gender: raw?.gender ?? raw?.sexo ?? 'macho',
     size: raw?.size ?? raw?.tamano ?? 'mediano',
+    convivencia: raw?.convivencia ?? 'Solo',
     isAdopted: raw?.isAdopted ?? raw?.is_adopted ?? false,
     adoptedDated: raw?.adoptedDated ?? raw?.adopted_dated ?? null,
     estadoInventario: raw?.estadoInventario ?? raw?.estado_inventario ?? undefined,
@@ -258,6 +259,7 @@ interface CreateAdoptionRequestInput {
   address: string;
   neighborhood: string;
   age: number;
+  convivencia: 'Solo' | 'Con otros';
   adoptionReason: string;
 }
 
@@ -318,6 +320,7 @@ export async function createAdoptionRequest(data: CreateAdoptionRequestInput): P
     await strapiPost('adoption-requests', {
       pet: data.pet,
       adopter: adopterDocumentId,
+      convivencia: data.convivencia,
       adoptionReason: data.adoptionReason,
     });
 

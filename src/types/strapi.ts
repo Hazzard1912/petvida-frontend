@@ -49,6 +49,7 @@ export interface IPet {
   ageGroup: 'cachorro' | 'joven' | 'adulto' | 'senior';
   gender: 'macho' | 'hembra';
   size: 'pequeño' | 'mediano' | 'grande';
+  convivencia: 'Solo' | 'Con otros';
   isAdopted: boolean;
   adoptedDated?: string | null;
   estadoInventario?: 'disponible' | 'reservado' | 'adoptado' | 'retirado';
