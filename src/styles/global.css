@@ -15,9 +15,9 @@
   --color-border: #E5E7EB;
   --color-shadow: rgba(15, 23, 42, 0.08);
   --color-shadow-strong: rgba(15, 23, 42, 0.16);
-  --font-title: 'Garet', 'League Spartan', system-ui, sans-serif;
-  --font-display: 'Chewy', cursive, system-ui;
-  --font-ui: 'League Spartan', system-ui, sans-serif;
+  --font-title: 'Fredoka', 'Fredoka', system-ui, sans-serif;
+  --font-display: 'Fredoka', cursive, system-ui;
+  --font-ui: 'Fredoka', system-ui, sans-serif;
   --font-body: 'Fredoka', system-ui, sans-serif;
   --spacing-xxs: 4px;
   --spacing-xs: 8px;
@@ -528,7 +528,7 @@ html, body {
 }
 
 .about-title {
-  font-family: 'Chewy', cursive, system-ui;
+  font-family: 'Fredoka', cursive, system-ui;
   font-weight: 700;
   font-size: 1.25rem;
   text-align: center;
@@ -676,7 +676,7 @@ html, body {
 }
 
 .about-title {
-  font-family: 'Chewy', cursive, system-ui;
+  font-family: 'Fredoka', cursive, system-ui;
   font-weight: 700;
   font-size: 1.25rem;
   text-align: center;

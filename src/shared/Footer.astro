@@ -1,103 +1,221 @@
 ---
 const currentYear = new Date().getFullYear();
-const currentDate = new Date().toLocaleDateString('es-CO', {
-  day: '2-digit',
-  month: 'long',
-  year: 'numeric',
+const currentDate = new Date().toLocaleDateString("es-CO", {
+  day: "2-digit",
+  month: "long",
+  year: "numeric",
 });
 ---
 
-<footer class="w-full relative overflow-hidden" style="background-color: #F42476;">
- 
-  <div class="absolute top-0 left-0 right-0 h-16" style="background-color: white;">
-    <svg class="w-full h-full" preserveAspectRatio="none" viewBox="0 0 1440 100" xmlns="http://www.w3.org/2000/svg">
-      <path fill="#F42476" d="M0,25 Q360,55 720,25 T1440,25 L1440,100 L0,100 Z"/>
+<footer
+  class="w-full relative overflow-hidden"
+  style="background-color: #F42476;"
+>
+  <div
+    class="absolute top-0 left-0 right-0 h-16"
+    style="background-color: white;"
+  >
+    <svg
+      class="w-full h-full"
+      preserveAspectRatio="none"
+      viewBox="0 0 1440 100"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path fill="#F42476" d="M0,25 Q360,55 720,25 T1440,25 L1440,100 L0,100 Z"
+      ></path>
     </svg>
   </div>
 
- 
-  <svg class="absolute top-24 left-8 w-16 h-16 opacity-20" viewBox="0 0 92 24" xmlns="http://www.w3.org/2000/svg">
-    <path fill="white" d="M14 2c6-5 16-5 22 1 1 1 2 3 2 4 0 1 0 2-1 3 6 1 13 6 16 12 2 4 2 9 0 13-3 6-10 10-16 9-1 1-2 2-3 2-6 1-13-2-16-8-1-2-1-4-1-6-4 0-8-2-10-5-3-5-2-12 3-15 2-2 5-3 8-3 1-3 4-5 7-6zm60 4c5 1 9 7 8 13-1 5-6 9-11 9-3 0-6-1-8-3l-1-1c1-1 1-2 1-3 0-3-2-5-4-6 1-1 2-3 2-4 0-4 3-8 7-8 1 0 3 0 4 1z"/>
+  <svg
+    class="absolute top-24 left-8 w-16 h-16 opacity-20"
+    viewBox="0 0 92 24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fill="white"
+      d="M14 2c6-5 16-5 22 1 1 1 2 3 2 4 0 1 0 2-1 3 6 1 13 6 16 12 2 4 2 9 0 13-3 6-10 10-16 9-1 1-2 2-3 2-6 1-13-2-16-8-1-2-1-4-1-6-4 0-8-2-10-5-3-5-2-12 3-15 2-2 5-3 8-3 1-3 4-5 7-6zm60 4c5 1 9 7 8 13-1 5-6 9-11 9-3 0-6-1-8-3l-1-1c1-1 1-2 1-3 0-3-2-5-4-6 1-1 2-3 2-4 0-4 3-8 7-8 1 0 3 0 4 1z"
+    ></path>
   </svg>
 
-
-  <svg class="absolute top-32 right-12 w-12 h-12 opacity-25" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="white">
-    <path d="M12 2c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zm0 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-.6 0-1 .4-1 1s.4 1 1 1 1-.4 1-1-.4-1-1-1zm12 0c-.6 0-1 .4-1 1s.4 1 1 1 1-.4 1-1-.4-1-1-1z"/>
+  <svg
+    class="absolute top-32 right-12 w-12 h-12 opacity-25"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="white"
+  >
+    <path
+      d="M12 2c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zm0 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-.6 0-1 .4-1 1s.4 1 1 1 1-.4 1-1-.4-1-1-1zm12 0c-.6 0-1 .4-1 1s.4 1 1 1 1-.4 1-1-.4-1-1-1z"
+    ></path>
   </svg>
 
-  
-  <svg class="absolute bottom-0 right-0 w-32 h-32 opacity-15" viewBox="0 0 86 78" xmlns="http://www.w3.org/2000/svg" fill="white">
-    <path d="M33 63c-9-1-17-5-23-11-11-11-14-29-6-42 8-13 25-19 39-13 11 5 17 17 19 29 1 5 0 11-1 16 6-1 13-1 18 1 26 7 41 36 31 60-10 25-40 36-65 27-17-6-32-21-34-39z"/>
-    <path d="M21 22c-5-14 2-32 16-38 12-6 29 4 35 17 5 11 1 24-8 31-8 6-21 7-28-1-5-6-8-14-15-9z"/>
-    <path d="M48 18c4-11 14-18 25-17 10 1 18 10 22 19 2 7 0 15-5 20-4 4-10 4-15 3-6-1-10-6-13-10-6-7-10-13-14-15z"/>
+  <svg
+    class="absolute bottom-0 right-0 w-32 h-32 opacity-15"
+    viewBox="0 0 86 78"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="white"
+  >
+    <path
+      d="M33 63c-9-1-17-5-23-11-11-11-14-29-6-42 8-13 25-19 39-13 11 5 17 17 19 29 1 5 0 11-1 16 6-1 13-1 18 1 26 7 41 36 31 60-10 25-40 36-65 27-17-6-32-21-34-39z"
+    ></path>
+    <path
+      d="M21 22c-5-14 2-32 16-38 12-6 29 4 35 17 5 11 1 24-8 31-8 6-21 7-28-1-5-6-8-14-15-9z"
+    ></path>
+    <path
+      d="M48 18c4-11 14-18 25-17 10 1 18 10 22 19 2 7 0 15-5 20-4 4-10 4-15 3-6-1-10-6-13-10-6-7-10-13-14-15z"
+    ></path>
   </svg>
-
 
   <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12">
     <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
-    
       <div class="space-y-4">
-        <div class="flex items-center gap-3">
-          <div class="w-14 h-14 rounded-full flex items-center justify-center text-2xl" style="background-color: rgba(255, 255, 255, 0.3);">
-            🐾
-          </div>
-          <span class="text-3xl font-extrabold text-white font-display">PetVida</span>
+        <div class="flex items-center">
+          <img
+            src="/logo.png"
+            alt="Fundación Huella de Esperanza"
+            class="w-48 h-48 object-contain"
+          />
         </div>
         <p class="text-sm leading-relaxed text-white text-opacity-90">
-          Reutilizando tecnología con propósito para apoyar el refugio Huellas de Esperanza en Cali, Colombia.
+          Reutilizando tecnología con propósito para apoyar el refugio Huellas
+          de Esperanza en Cali, Colombia.
         </p>
       </div>
 
-   
       <div>
-        <h3 class="text-base font-bold uppercase mb-6 text-white">Enlaces Rápidos</h3>
+        <h3 class="text-base font-bold uppercase mb-6 text-white">
+          Enlaces Rápidos
+        </h3>
         <ul class="space-y-3">
-          <li><a href="/adopta" class="text-white text-opacity-85 hover:text-opacity-100 transition-all text-sm">Programa de Adopción</a></li>
-          <li><a href="/catalogo" class="text-white text-opacity-85 hover:text-opacity-100 transition-all text-sm">Catalogo Solidario</a></li>
-          <li><a href="/ayudanos" class="text-white text-opacity-85 hover:text-opacity-100 transition-all text-sm">Padrinos y Donantes</a></li>
-          <li><a href="/transparencia" class="text-white text-opacity-85 hover:text-opacity-100 transition-all text-sm">Documentos ESAL</a></li>
-          <li><a href="/noticias" class="text-white text-opacity-85 hover:text-opacity-100 transition-all text-sm">Noticias</a></li>
-          <li><a href="/#faq" class="text-white text-opacity-85 hover:text-opacity-100 transition-all text-sm">Preguntas Frecuentes</a></li>
-          <li><a href="/contacto" class="text-white text-opacity-85 hover:text-opacity-100 transition-all text-sm">Contacto</a></li>
+          <li>
+            <a
+              href="/adopta"
+              class="text-white text-opacity-85 hover:text-opacity-100 transition-all text-sm"
+              >Programa de Adopción</a
+            >
+          </li>
+          <li>
+            <a
+              href="/catalogo"
+              class="text-white text-opacity-85 hover:text-opacity-100 transition-all text-sm"
+              >Catalogo Solidario</a
+            >
+          </li>
+          <li>
+            <a
+              href="/ayudanos"
+              class="text-white text-opacity-85 hover:text-opacity-100 transition-all text-sm"
+              >Padrinos y Donantes</a
+            >
+          </li>
+          <li>
+            <a
+              href="/transparencia"
+              class="text-white text-opacity-85 hover:text-opacity-100 transition-all text-sm"
+              >Documentos ESAL</a
+            >
+          </li>
+          <li>
+            <a
+              href="/noticias"
+              class="text-white text-opacity-85 hover:text-opacity-100 transition-all text-sm"
+              >Noticias</a
+            >
+          </li>
+          <li>
+            <a
+              href="/#faq"
+              class="text-white text-opacity-85 hover:text-opacity-100 transition-all text-sm"
+              >Preguntas Frecuentes</a
+            >
+          </li>
+          <li>
+            <a
+              href="/contacto"
+              class="text-white text-opacity-85 hover:text-opacity-100 transition-all text-sm"
+              >Contacto</a
+            >
+          </li>
         </ul>
       </div>
 
-   
       <div>
         <h3 class="text-base font-bold uppercase mb-6 text-white">Contacto</h3>
         <div class="space-y-2 text-sm">
-          <p class="text-white text-opacity-90">📍 Refugio en Cali, Colombia</p>
-          <p class="text-white text-opacity-90">📞 +57 (2) XXXX-XXXX</p>
-          <p class="text-white text-opacity-90">✉️ contacto@petvida.co</p>
+          <p class="text-white text-opacity-90">📍Cali, Colombia</p>
+          <p class="text-white text-opacity-90">📞 +57 318 1785201</p>
+          <p class="text-white text-opacity-90">✉️ adopta.huellaf@gmail.com</p>
         </div>
       </div>
 
-     
       <div>
         <h3 class="text-base font-bold uppercase mb-6 text-white">Síguenos</h3>
         <div class="flex items-center gap-4">
-          <a href="#" aria-label="Facebook" class="w-10 h-10 rounded-full flex items-center justify-center transition-transform hover:scale-110" style="background-color: rgba(255, 255, 255, 0.2);">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white">
-              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+          <a
+            href="https://www.facebook.com/share/1EyjuxBEes/"
+            aria-label="Facebook"
+            class="w-10 h-10 rounded-full flex items-center justify-center transition-transform hover:scale-110"
+            style="background-color: rgba(255, 255, 255, 0.2);"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="white"
+            >
+              <path
+                d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
+              ></path>
             </svg>
           </a>
-          <a href="#" aria-label="Instagram" class="w-10 h-10 rounded-full flex items-center justify-center transition-transform hover:scale-110" style="background-color: rgba(255, 255, 255, 0.2);">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white">
-              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
+          <a
+            href="https://www.instagram.com/fundacionhuelladeesperanza?igsi=ZDNlZDc0MzIxNw=="
+            aria-label="Instagram"
+            class="w-10 h-10 rounded-full flex items-center justify-center transition-transform hover:scale-110"
+            style="background-color: rgba(255, 255, 255, 0.2);"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="white"
+            >
+              <path
+                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"
+              ></path>
             </svg>
           </a>
-          <a href="#" aria-label="Twitter / X" class="w-10 h-10 rounded-full flex items-center justify-center transition-transform hover:scale-110" style="background-color: rgba(255, 255, 255, 0.2);">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white">
-              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          <a
+            href="https://www.tiktok.com/@huellasdeesperanz_a?is_from_webapp=1&sender_device=pc"
+            aria-label="TikTok"
+            class="w-10 h-10 rounded-full flex items-center justify-center transition-transform hover:scale-110"
+            style="background-color: rgba(255, 255, 255, 0.2);"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="white"
+            >
+              <path
+                fill="white"
+                d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.56 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.62-4.91 1.43-1.16 3.29-1.78 5.15-1.63.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.05 3.5 2.95 1.12-.01 2.19-.66 2.77-1.62.11-.65.03-1.3.04-1.95.01-3.49-.01-6.98.02-10.48z"
+              ></path>
             </svg>
           </a>
         </div>
       </div>
     </div>
 
-   
-    <div class="mt-12 pt-8 border-t border-white border-opacity-20 text-center text-sm text-white text-opacity-80">
-      <p>&copy; {currentYear} PetVida (Fundación Huellas de Esperanza). Todos los derechos reservados.</p>
+    <div
+      class="mt-12 pt-8 border-t border-white border-opacity-20 text-center text-sm text-white text-opacity-80"
+    >
+      <p>
+        &copy; {currentYear} PetVida (Fundación Huellas de Esperanza). Todos los derechos
+        reservados.
+      </p>
       <p class="mt-2">Desarrollado por Jhonnier Hernandez & 404 Crew</p>
     </div>
   </div>

@@ -1,76 +1,119 @@
 ---
 const currentPath = new URL(Astro.request.url).pathname;
 const navItems = [
-  { href: '/', label: 'Inicio' },
-  { href: '/adopta', label: 'Adoptar' },
-  { href: '/catalogo', label: 'Catalogo' },
-  { href: '/ayudanos', label: 'Donar' },
-  { href: '/noticias', label: 'Noticias' },
-  { href: '/contacto', label: 'Contacto' },
+  { href: "/", label: "Inicio" },
+  { href: "/adopta", label: "Adoptar" },
+  { href: "/catalogo", label: "Catálogo" },
+  { href: "/ayudanos", label: "Donar" },
+  { href: "/noticias", label: "Noticias" },
+  { href: "/contacto", label: "Contacto" },
 ];
 ---
 
-<header class="sticky top-0 z-40 w-full site-header">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-    <div class="flex items-center gap-3">
-      <span class="text-2xl">🐾</span>
-      <a href="/" class="brand-logo">PetVida</a>
-    </div>
-
-    <nav class="hidden md:flex items-center gap-2">
-      {navItems.map((item) => (
+<header class="site-header sticky top-0 z-40 w-full">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-20">
+      <!-- Logo y nombre -->
+      <div class="flex items-center gap-3 flex-shrink-0">
         <a
-          href={item.href}
-          class={`nav-item ${currentPath === item.href ? 'active' : ''}`}
+          href="/"
+          class="flex items-center gap-3 transition-opacity hover:opacity-80"
         >
-          {item.label}
+          <img
+            src="/logo.png"
+            alt="Fundación Huella de Esperanza"
+            class="h-20 w-auto object-contain"
+          />
+          <span class="brand-logo hidden sm:block"> Huella de Esperanza </span>
         </a>
-      ))}
-    </nav>
+      </div>
 
-    <div class="hidden md:block">
-      <a
-        href="/adopta"
-        class="nav-cta"
+      <!-- Navegación Desktop -->
+      <nav class="hidden md:flex items-center gap-1">
+        {
+          navItems.map((item) => (
+            <a
+              href={item.href}
+              class={`nav-item ${currentPath === item.href ? "active" : ""}`}
+            >
+              {item.label}
+            </a>
+          ))
+        }
+      </nav>
+
+      <!-- CTA Desktop -->
+      <div class="hidden md:block flex-shrink-0">
+        <a href="/adopta" class="nav-cta inline-flex items-center text-sm">
+          Adoptar un peludo
+        </a>
+      </div>
+
+      <!-- Botón menú móvil -->
+      <button
+        id="menu-toggle"
+        type="button"
+        class="md:hidden p-2 text-stone-700 hover-highlight rounded-lg transition-all duration-200"
+        aria-label="Abrir menú"
+        aria-expanded="false"
       >
-        Adoptar un peludo
-      </a>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="2"
+          stroke="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
+        </svg>
+      </button>
     </div>
-
-    <button id="menu-toggle" type="button" class="md:hidden p-2 text-stone-700 hover-highlight rounded-lg" aria-label="Abrir menú">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-      </svg>
-    </button>
   </div>
 
-  <div id="mobile-menu" class="md:hidden hidden border-t border-stone-200/60 bg-white/95 backdrop-blur-md">
-    <nav class="flex flex-col px-4 py-4 space-y-2 text-sm font-medium">
-      {navItems.map((item) => (
-        <a
-          href={item.href}
-          class={`mobile-item ${currentPath === item.href ? 'mobile-item-active' : ''}`}
-        >
-          {item.label}
-        </a>
-      ))}
-      <a href="/adopta" class="mt-3 inline-flex items-center justify-center px-4 h-10 text-sm font-medium text-white nav-cta">
-        Adoptar un peludo
-      </a>
-    </nav>
+  <!-- Menú Móvil -->
+  <div
+    id="mobile-menu"
+    class="md:hidden hidden border-t border-stone-200/60 bg-white/95 backdrop-blur-md"
+  >
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <nav class="flex flex-col space-y-1">
+        {
+          navItems.map((item) => (
+            <a
+              href={item.href}
+              class={`mobile-item ${currentPath === item.href ? "mobile-item-active" : ""}`}
+            >
+              {item.label}
+            </a>
+          ))
+        }
+        <div class="pt-3 mt-3 border-t border-stone-200/60">
+          <a
+            href="/adopta"
+            class="flex items-center justify-center w-full px-4 py-3 text-sm font-semibold text-white nav-cta rounded-lg transition-all duration-200"
+          >
+            Adoptar un peludo
+          </a>
+        </div>
+      </nav>
+    </div>
   </div>
 </header>
 
 <script>
-  const toggle = document.getElementById('menu-toggle');
-  const menu = document.getElementById('mobile-menu');
+  const toggle = document.getElementById("menu-toggle");
+  const menu = document.getElementById("mobile-menu");
 
   if (toggle && menu) {
-    toggle.addEventListener('click', () => {
-      const isOpen = !menu.classList.contains('hidden');
-      menu.classList.toggle('hidden');
-      toggle.setAttribute('aria-label', isOpen ? 'Abrir menú' : 'Cerrar menú');
-      toggle.setAttribute('aria-expanded', String(!isOpen));
+    toggle.addEventListener("click", () => {
+      const isOpen = !menu.classList.contains("hidden");
+      menu.classList.toggle("hidden");
+      toggle.setAttribute("aria-label", isOpen ? "Abrir menú" : "Cerrar menú");
+      toggle.setAttribute("aria-expanded", String(!isOpen));
       toggle.innerHTML = isOpen
         ? `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>`
         : `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>`;
