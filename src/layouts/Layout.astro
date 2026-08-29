@@ -1,45 +1,60 @@
 ---
-import '../styles/global.css';
-import Navbar from '../shared/Navbar.astro';
-import Footer from '../shared/Footer.astro';
+import "../styles/global.css";
+import Navbar from "../shared/Navbar.astro";
+import Footer from "../shared/Footer.astro";
 
 export interface Props {
-	title: string;
-	description?: string;
-	ogTitle?: string;
-	ogDescription?: string;
+  title: string;
+  description?: string;
+  ogTitle?: string;
+  ogDescription?: string;
 }
 
-const { 
-	title, 
-	description = "Plataforma de adopción y apoyo para la Fundación Huellas de Esperanza en Cali, Colombia.",
-	ogTitle = title,
-	ogDescription = description,
+const {
+  title,
+  description = "Plataforma de adopción y apoyo para la Fundación Huellas de Esperanza en Cali, Colombia.",
+  ogTitle = title,
+  ogDescription = description,
 } = Astro.props;
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es" class="scroll-smooth">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<meta name="description" content={description} />
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chewy&family=Fredoka:wght@400;500;600;700&family=League+Spartan:wght@500;600;700;800&display=swap" />
-		<title>{title} | Fundación Huella de Esperanza</title>
-	</head>
-	<body class="flex flex-col min-h-screen antialiased">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-		<Navbar />
+    <link rel="icon" type="image/svg+xml" href="/favicon.png" />
 
-		<main class="grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-			<slot />
-		</main>
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
 
-		<Footer />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
 
-	</body>
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site)} />
+    <meta property="og:title" content={ogTitle} />
+    <meta property="og:description" content={ogDescription} />
+    <meta property="og:image" content={new URL("/logo.png", Astro.site)} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Chewy&family=Fredoka:wght@400;500;600;700&family=League+Spartan:wght@500;600;700;800&display=swap"
+    />
+
+    <title>{title} | Fundación Huella de Esperanza</title>
+  </head>
+
+  <body class="flex flex-col min-h-screen antialiased">
+    <Navbar />
+
+    <main class="grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <slot />
+    </main>
+
+    <Footer />
+  </body>
 </html>
