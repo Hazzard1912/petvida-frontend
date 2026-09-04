@@ -45,14 +45,14 @@ export interface IPet {
   documentId: string;
   name: string;
   description: string;
-  species: 'perro' | 'gato';
-  ageGroup: 'cachorro' | 'joven' | 'adulto' | 'senior';
-  gender: 'macho' | 'hembra';
-  size: 'pequeño' | 'mediano' | 'grande';
+  species: 'Perro' | 'Gato';
+  ageGroup: string;
+  gender: 'Macho' | 'Hembra';
+  size: 'Pequeño' | 'Mediano' | 'Grande';
   convivencia: 'Solo' | 'Con otros';
   isAdopted: boolean;
   adoptedDated?: string | null;
-  estadoInventario?: 'disponible' | 'reservado' | 'adoptado' | 'retirado';
+  estadoInventario?: 'En adopción' | 'Reservado' | 'Adoptado' | 'Retirado';
   validadoInventario?: boolean;
   notasInventario?: string | null;
   photos?: Array<{

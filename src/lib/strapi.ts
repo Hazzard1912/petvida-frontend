@@ -104,10 +104,10 @@ function normalizePetMedia(item: any, photoWidth?: number): IPet {
     documentId: raw?.documentId ?? raw?.document_id ?? '',
     name: raw?.name ?? '',
     description: raw?.description ?? '',
-    species: raw?.species ?? 'perro',
+    species: raw?.species ?? 'Perro',
     ageGroup: raw?.ageGroup ?? raw?.age_group ?? 'adulto',
-    gender: raw?.gender ?? raw?.sexo ?? 'macho',
-    size: raw?.size ?? raw?.tamano ?? 'mediano',
+    gender: raw?.gender ?? raw?.sexo ?? 'Macho',
+    size: raw?.size ?? raw?.tamano ?? 'Mediano',
     convivencia: raw?.convivencia ?? 'Solo',
     isAdopted: raw?.isAdopted ?? raw?.is_adopted ?? false,
     adoptedDated: raw?.adoptedDated ?? raw?.adopted_dated ?? null,
@@ -318,8 +318,8 @@ export async function createAdoptionRequest(data: CreateAdoptionRequestInput): P
     }
 
     await strapiPost('adoption-requests', {
-      pet: data.pet,
-      adopter: adopterDocumentId,
+      pet: { connect: [data.pet] },
+      adopter: { connect: [adopterDocumentId] },
       convivencia: data.convivencia,
       adoptionReason: data.adoptionReason,
     });
@@ -356,8 +356,8 @@ export async function createSponsorRequest(data: CreateSponsorRequestInput): Pro
     }
 
     await strapiPost('sponsor-requests', {
-      pet: data.pet,
-      sponsor: sponsorDocumentId,
+      pet: { connect: [{ documentId: data.pet }] },
+      sponsor: { connect: [{ documentId: sponsorDocumentId }] },
       monthlyAmount: data.monthlyAmount,
     });
 
