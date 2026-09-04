@@ -104,6 +104,30 @@ const navItems = [
   </div>
 </header>
 
+<div
+  id="mobile-menu"
+  class="md:hidden hidden border-t border-stone-200/60 bg-white/95 backdrop-blur-md"
+>
+  <nav class="flex flex-col px-4 py-4 space-y-2 text-sm font-medium">
+    {
+      navItems.map((item) => (
+        <a
+          href={item.href}
+          class={`mobile-item ${currentPath === item.href ? "mobile-item-active" : ""}`}
+        >
+          {item.label}
+        </a>
+      ))
+    }
+    <a
+      href="/adopta"
+      class="mt-3 inline-flex items-center justify-center px-4 h-10 text-sm font-medium text-white nav-cta"
+    >
+      Adoptar un peludo
+    </a>
+  </nav>
+</div>
+
 <script>
   const toggle = document.getElementById("menu-toggle");
   const menu = document.getElementById("mobile-menu");
